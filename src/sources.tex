@@ -1,0 +1,43 @@
+\newcommand*{\sectionsources}[1]{\textbf{\textcolor{ChadBlue}{\underline{#1}}}}
+
+\newpage
+\begin{center}
+\huge \textbf{\textcolor{ChadBlue}{\underline{Материалы}}}
+
+\normalsize
+\vspace{0.3cm}
+Большая часть материалов взята из основных курсов по обучению с подкреплением:
+
+\vspace{0.3cm}
+\href{http://rail.eecs.berkeley.edu/deeprlcourse/}{Курс Сергея Левина}; %CS 285 Deep Reinforcement Learning, UC Berkeley
+
+\vspace{0.3cm}
+\href{https://github.com/yandexdataschool/Practical_RL}{Курс Practical RL};
+
+\vspace{0.3cm}
+\href{https://www.davidsilver.uk/teaching/}{Курс Дэвида Сильвера};
+
+\vspace{0.3cm}
+\href{https://www.youtube.com/watch?v=ISk80iLhdfU&list=PLqYmG7hTraZBKeNJ-JE_eyJHZ7XgBoAyb&index=1}{Курс DeepMind};
+
+\vspace{0.3cm}
+\href{https://www.udacity.com/course/reinforcement-learning--ud600}{Курс GeorgiaTech};
+\end{center}
+
+В \underline{\textbf{главе 2}} большинство материала взято из \href{https://cs.gmu.edu/~sean/book/metaheuristics/Essentials.pdf}{книги} \cite{luke2013essentials}. Хороший обзор эволюционных стратегий можно найти в \href{https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html}{блоге Lil'log} \cite{weng2019ES}. Алгоритм NEAT предложен в \cite{stanley2002evolving}. Алгоритм WANN развил его идею в \cite{gaier2019weight}. Кросс-энтропийный метод как метод оптимизации и метод вычисления вероятности маловероятных событий предложен в \cite{botev2013cross}; его применение к задаче RL обычно связывают с \cite{szita2006learning}, где его применили к тетрису. OpenAI-ES описана в \cite{salimans2017evolution}; упомянутый алгоритм ARS, действующий примерно также, предложен в \cite{mania2018simple}. Идея адаптировать ковариационную матрицу в эволюционных стратегиях восходит корнями к \cite{hansen1996adapting}; полный технический обзор всего набора эвристик, использующихся как алгоритм CMA-ES, можно прочитать \href{https://arxiv.org/pdf/1604.00772.pdf}{здесь} \cite{hansen2016cma}. Доказательство того, что адаптация матрицы ковариации по сути является натуральным градиентным спуском, было независимо получено в \cite{akimoto2010bidirectional} и \cite{glasmachers2010exponential}.
+
+Больше информации по \underline{\textbf{главе 3}} и более подробную библиографию можно получить \href{https://drive.google.com/file/d/1Z4W_-0IaMNpZnhnMkqcDVM_EA79GFJo-/view}{в классической книге Саттона-Барто} \cite{sutton2018reinforcement}; отмечу только некоторые дополнительные ссылки. Лемма RPI была представлена в \cite{kakade2002approximately}. Алгоритм Q-learning, изначально придуманный в \cite{watkins1989learning}, был придуман как эвристика, но позже авторам удалось доказать сходимость в \cite{watkins1992q}; это доказательство через ARP и приведено в приложении. Связь с теорией стохастической аппроксимации, начатой ещё в далёком 1951-ом году статьёй \cite{robbins1951stochastic}, была обнаружена после этого в \cite{tsitsiklis1994asynchronous}, что позволило доказать более сильные утверждения вроде сходимости TD($\lambda$).
+
+\underline{\textbf{Глава 4}} основана на алгоритме DQN \cite{mnih2013playing}, продемонстрировавшем потенциал совмещения глубокого обучения с классической теорией. Идея борьбы с переоценкой при помощи двух аппроксимаций Q-функций была предложена в \cite{hasselt2010double} для табличного алгоритма. Clipped Twin оценка предложена была позже (в рамках алгоритма TD3) в \cite{fujimoto2018addressing}. Double DQN предложен в \cite{van2016deep}; Dueling DQN в \cite{wang2015dueling}; Noisy Nets в \cite{fortunato2017noisy}. Приоритизированный реплей был использован в DQN в \cite{schaul2015prioritized}; идею высчитывать приоритеты онлайн и добавлять в буфер уже <<с правильным>> приоритетом реализовали в алгоритме R2D2 \cite{horgan2018distributed}. Эвристика многошагового DQN была описана в составе Rainbow \cite{hessel2018rainbow}. 
+
+\needspace{7\baselineskip}
+\begin{wrapfigure}{r}{0.15\textwidth}
+\vspace{-0.5cm}
+\centering
+\includegraphics[width=0.15\textwidth]{Images/Scrat.png}
+\vspace{-0.5cm}
+\end{wrapfigure}
+
+Изображения c роботом взяты из \href{https://inst.eecs.berkeley.edu/~cs188/fa20/}{курса CS-188 Introduction to Artificial Intelligence, Berkeley}. Прочие изображения взяты из исходных статей и из распространённых сред (OpenAI Gym \cite{brockman2016openai}, Mario \cite{gym-super-mario-bros}, Unity ML Agents \cite{juliani2018unity}). Кастомные изображения для примеров и схем были нарисованы в \href{https://www.draw.io/}{draw.io}; изображение белки на них взято из \href{https://twitter.com/racefornuts/status/690043558208913408}{вот этого твита}; судя по всему, это незаюзанный концепт-арт для некой игры <<Трагедия белок>>... а вот, пригодился!
+
+\bibliography{DRL}

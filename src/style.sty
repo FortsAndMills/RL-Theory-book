@@ -1,0 +1,422 @@
+\usepackage[T2A, T1]{fontenc}    % ?!?
+\usepackage[utf8]{inputenc}      % позволяет использовать не-ASCII символы
+\usepackage[english, main=russian]{babel}     % используем русский язык
+
+\usepackage{graphicx}            % Картинки
+\usepackage{tikz}                % Схемы с картинками (нужны для орешков ;) )
+\usepackage{media9}              % вставка с ютуба
+%\graphicspath{{Pictures/}}      % Specifies the directory where pictures are stored
+\usepackage{pdfpages}            % добавить pdf в конец документа
+
+% математика
+\usepackage{mathtools}          % ?!?
+\usepackage{amsmath,amsfonts,amssymb,amsthm}  % уравнения, теоремы и символы в принятом американском стиле
+\allowdisplaybreaks             % позволяет делать разрывы страниц внутри align многострочных формул.
+
+%----------------------------------------------------------------------------------------
+%	ДИЗАЙН
+%----------------------------------------------------------------------------------------
+
+% Стиль страницы
+\makepagestyle{custom}
+\makeevenfoot{custom}{}{\thepage}{}   % внизу номер страницы
+\makeoddfoot{custom}{}{\thepage}{}    % внизу номер страницы
+\makeevenhead{custom}{}{}{}           % вверху пусто
+\makeoddhead{custom}{}{}{}            % вверху пусто
+\pagestyle{custom}                    % Выставляем стиль
+\setlrmarginsandblock{2cm}{2cm}{*}    % отступы слева-справа
+\setulmarginsandblock{1.5cm}{2cm}{*}  % отступы сверху-снизу
+\checkandfixthelayout                 % memoir хочет корректировку
+
+% красивый шрифт
+\usepackage{opensans}
+
+% подключить прописные символы
+\usepackage{mathrsfs}
+
+% Детали
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}  % горизонтальная линия для титульника
+\usepackage{indentfirst}             % первый абзац с отступом
+\interfootnotelinepenalty=10000      % штраф за разрыв футноутов.
+\tolerance=10000                      % терпимость к жидким строкам (штрафует за выход строк за правую границу)
+
+% переопределение понятия выделения через \emph
+\let\emph\relax
+\DeclareTextFontCommand{\emph}{\bfseries\em}
+
+% Цвета
+\usepackage{xcolor}
+\definecolor{ChadBlue}{rgb}{.1,.1,.5}   
+\definecolor{ChadRed}{rgb}{.4,0,0}
+\definecolor{ChadPurple}{rgb}{.5,0,.5}
+\usepackage{afterpage}  % для перекраски последней страницы в чёрный
+
+% футноты в minipages по дефолту латинские и с ними возникают беды
+\let\thempfootnote\thefootnote
+
+% Якобы помогает корректно переносить английские куски текста
+\newcommand{\ENGLISH}[1]{\selectlanguage{english}{#1}\selectlanguage{russian}}
+% Ставить перед бинарными операциями в формулах внутри текста, чтобы они дублировались при переносе.
+\newcommand*{\HM}[1]{#1\nobreak\discretionary{}{\hbox{\(\mathsurround=0pt #1\)}}{}}
+
+% цветные квадратики
+\def \colorsquare#1{\fcolorbox{#1}{#1}{\rule{0pt}{4pt}\rule{4pt}{0pt}}}
+
+%----------------------------------------------------------------------------------------
+%	ГЛАВЫ, СЕКЦИИ, ПОДСЕКЦИИ
+%----------------------------------------------------------------------------------------
+
+% формат заголовков глав
+\usepackage{lipsum}
+\usepackage[explicit]{titlesec}
+\titleformat{\chapter}
+    {\bfseries\huge}
+    {}
+    {0pt}
+    {
+    \ifnum\value{chapter}>0 \titlerule[3pt] ~\raisebox{-1.5pt}{ \scshape{Глава}~\thechapter } ~\titlerule[3pt]  %
+            \\\vspace{.05cm}\titlerule \\\filcenter #1 \\\vspace{.25cm}\titlerule \fi 
+     \ifnum\value{chapter}=0 #1 \fi 
+    }
+    
+% формат секций
+\titleformat{\section}
+{\needspace{10\baselineskip}\color{ChadBlue}\normalfont\Large\bfseries}
+{\underline{\S\color{ChadBlue}\thesection. #1}}{2em}{}
+
+% класс memoir выключает нумеровку подсецкий и их добавление в оглавление: возвращаем
+\setsecnumdepth{subsection}
+\maxtocdepth{subsection}
+
+% формат подсекций
+\titleformat{\subsection}
+{\needspace{7\baselineskip}\color{ChadBlue}\normalfont\large\bfseries}
+{\color{ChadBlue}\thesubsection. #1}{1em}{}
+
+%----------------------------------------------------------------------------------------
+%	ТАБЛИЦЫ
+%----------------------------------------------------------------------------------------
+
+\usepackage{booktabs}               % toprule, midrule, bottomrule
+\renewcommand{\arraystretch}{1.25}  % расстояние между строчками
+
+% горизонтальная dashed line для табличек
+\usepackage{array}
+\usepackage{arydshln}
+\setlength\dashlinedash{0.2pt}
+\setlength\dashlinegap{1.5pt}
+\setlength\arrayrulewidth{0.3pt}
+
+%----------------------------------------------------------------------------------------
+%	ЛИТЕРАТУРА
+%----------------------------------------------------------------------------------------
+%\usepackage[square,numbers]{natbib}
+\bibliographystyle{apalike}
+%%\usepackage[nottoc,notlot,notlof]{tocbibind}
+\renewcommand{\bibsection}{\section*{Литература}}
+
+%----------------------------------------------------------------------------------------
+%	ССЫЛКИ
+%----------------------------------------------------------------------------------------
+\usepackage[colorlinks,breaklinks,
+     bookmarks=false,
+     pdfstartview=Fit,  % for fitting entire page; FitW just fits width
+     pdfview=Fit,       % after traversing a hyperlink
+     linkcolor=ChadPurple,
+     urlcolor=ChadRed,
+     citecolor=ChadBlue,
+     hyperfootnotes=false
+         ]{hyperref}
+\usepackage[figure,table]{hypcap} % Correct a problem with hyperref
+\urlstyle{rm}                     % so it doesn't use a typewriter font for url's.
+
+% При нажатии на ссылку отображает референс посередине страницы, а не в самом верху!
+\makeatletter
+\newcommand\org@hypertarget{}
+\let\org@hypertarget\hypertarget
+\renewcommand\hypertarget[2]{%
+\Hy@raisedlink{\org@hypertarget{#1}{}}#2%
+} \makeatother 
+
+%----------------------------------------------------------------------------------------
+%	ТЕОРЕМЫ И ПРИМЕРЫ - СТАРАЯ ВЕРСИЯ
+%   [пришлось отказаться в пользу tcolorbox, чтобы можно 
+%    было использовать wrapfigure внутри доказательств;
+%    wrapfigure конфликтует как с theorembox, так и с mdframed]
+%----------------------------------------------------------------------------------------
+
+% Создаём коробку для теорем
+% \newtheoremstyle{theorembox}% Theorem style name
+% {0pt}% Space above
+% {0pt}% Space below
+% {\normalfont}% Body font
+% {}% Indent amount
+% {\small\bfseries\sffamily\color{ChadBlue}}% Theorem head font
+% {\;}% Punctuation after theorem head
+% {0.25em}% Space after theorem head
+% {\underline{\small\sffamily\color{ChadBlue}\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
+% \thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries\color{ChadBlue}---\nobreakspace#3}}:} % Optional theorem note
+
+% % Назначаем, создавая коробку для теорем
+% \theoremstyle{theorembox}
+% \newtheorem{theoremeT}{Теорема}
+
+
+% Создаём коробку для примеров
+% \newtheoremstyle{examplebox}% Example style name
+% {0pt}% Space above
+% {0pt}% Space below
+% {\normalfont}% Body font
+% {}% Indent amount
+% {\small\bfseries\sffamily\color{ChadRed}}% Theorem head font
+% {\;}% Punctuation after theorem head
+% {0.25em}% Space after theorem head
+% {\underline{\small\sffamily\color{ChadRed}\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
+% \thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries\color{ChadRed}---\nobreakspace#3}}:} % Optional theorem note
+
+% % Назначаем, создавая коробку для теорем
+% \theoremstyle{examplebox}
+% \newtheorem{exampleT}{Пример}
+
+
+% Теоремы
+% \newmdenv[skipabove=7pt,
+% skipbelow=7pt,
+% backgroundcolor=ChadBlue!2,
+% linecolor=ChadBlue,
+% innerleftmargin=5pt,
+% innerrightmargin=5pt,
+% innertopmargin=5pt,
+% leftmargin=0cm,
+% rightmargin=0cm,
+% innerbottommargin=5pt]{tBox}
+
+% % назначаем
+% \newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
+
+% Примеры
+% \newmdenv[skipabove=7pt,
+% skipbelow=7pt,
+% backgroundcolor=ChadRed!2,
+% linecolor=ChadRed,
+% innerleftmargin=5pt,
+% innerrightmargin=5pt,
+% innertopmargin=5pt,
+% leftmargin=0cm,
+% rightmargin=0cm,
+% innerbottommargin=5pt]{eBox}
+
+% % назначаем
+% \newenvironment{example}{\begin{eBox}\begin{exampleT}}{\end{exampleT}\end{eBox}}
+
+%----------------------------------------------------------------------------------------
+%	ТЕОРЕМЫ
+%----------------------------------------------------------------------------------------
+
+\makeatletter                             % Чинит какую-то проблему
+\renewcommand{\qedsymbol}{$\blacksquare$} % символ конца доказательства
+
+% breakable рубит коробки в случае начала новой страницы
+% enhanced jigsaw из skins делает это аккуратно без лишних линий в месте обрыва
+\usepackage[breakable, skins]{tcolorbox}
+
+% версия коробок для теорем через tcolorbox
+\def \ifempty#1{\def\temp{#1}\ifx\temp\empty}
+\def \theoremmacro#1#2{\ifempty{#2}Теорема #1\elseТеорема #1 --- #2\fi}
+\newtcolorbox[auto counter]{theoremBox}[2][]{
+enhanced jigsaw,
+breakable,
+colback=ChadBlue!2,   % цвет фона
+colframe=ChadBlue,    % цвет рамки
+left=1pt,             % отступы
+right=1pt,
+top=1pt,
+bottom=1pt,
+before skip=10pt plus 2pt,
+after skip=10pt plus 2pt,
+arc=0mm,              % закругление рамки
+boxrule=0.5pt,        % толщина рамки
+parbox=false,         % лечит проблему с отступом в начале абзацев
+detach title,         % убирает отдельный бокс для заголовка
+fonttitle=\small\sffamily\bfseries\color{ChadBlue},
+title={\bfseries\underline{\theoremmacro{\thetcbcounter}{#2}}: \,},
+before upper={\tcbtitle},
+#1
+}
+
+\newenvironment{theorem}[1][]{\begin{theoremBox}{#1}}{\end{theoremBox}}
+
+\newcommand{\tagqed}{\tag*{$\blacksquare$}}
+\newcommand*{\QED}{%
+\leavevmode\unskip\penalty9999 \hbox{}\nobreak\hfill
+    \quad\hbox{$\blacksquare$}%
+}
+\renewenvironment{proof}[1][Доказательство]{\par\vspace{2mm}\textit{#1}. }{\QED}
+\newcommand*{\beginproof}[1][Доказательство]{\par\vspace{2mm}\textit{#1}. }
+
+%----------------------------------------------------------------------------------------
+%	ПРИМЕРЫ
+%----------------------------------------------------------------------------------------
+
+% тоже самое, что и для теорем
+\def \examplemacro#1#2{\ifempty{#2}Пример #1\elseПример #1 --- #2\fi}
+\newtcolorbox[auto counter]{exampleBox}[2][]{
+enhanced jigsaw,
+breakable,
+colback=ChadRed!2,   % цвет фона
+colframe=ChadRed,    % цвет рамки
+left=1pt,             % отступы
+right=1pt,
+top=1pt,
+bottom=1pt,
+before skip=10pt plus 2pt,
+after skip=10pt plus 2pt,
+arc=0mm,              % закругление рамки
+boxrule=0.5pt,        % толщина рамки
+parbox=false,         % лечит проблему с отступом в начале абзацев
+detach title,         % убирает отдельный бокс для заголовка
+fonttitle=\small\sffamily\bfseries\color{ChadRed},
+title={\bfseries\underline{\examplemacro{\thetcbcounter}{#2}}: \,},
+before upper={\tcbtitle},
+#1
+}
+
+\newenvironment{example}[1][]{\begin{exampleBox}{#1}}{\end{exampleBox}}
+
+%----------------------------------------------------------------------------------------
+%	УТВЕРЖДЕНИЯ И ОПРЕДЕЛЕНИЯ
+%----------------------------------------------------------------------------------------
+
+% Создаём оформление утверждений и определений
+\newtheoremstyle{blacknumbox} % Theorem style name
+{0pt}% Space above
+{0pt}% Space below
+{\normalfont}% Body font
+{}% Indent amount
+{\small\bfseries\sffamily}% Theorem head font
+{\;}% Punctuation after theorem head
+{0.25em}% Space after theorem head
+{\underline{\small\sffamily\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
+\thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries---\nobreakspace#3}}:}% Optional theorem note
+
+% назначаем
+\theoremstyle{blacknumbox}
+\newtheorem{definitionT}{Определение}
+\newtheorem{propositionT}{Утверждение}
+
+% теперь сами коробки
+\RequirePackage[framemethod=default]{mdframed}
+
+% Определения
+\newmdenv[skipabove=7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=true,
+topline=false,
+bottomline=false,
+linecolor=ChadPurple,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=0pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=4pt,
+innerbottommargin=0pt]{dBox}
+
+% назначаем
+\newenvironment{definition}{\begin{dBox}\begin{definitionT}}{\end{definitionT}\end{dBox}}	
+
+% proposition box
+\newmdenv[skipabove=7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=true,
+topline=false,
+bottomline=false,
+linecolor=ChadBlue,
+backgroundcolor=black!5,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=5pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=4pt,
+innerbottommargin=5pt]{pBox}
+
+% назначаем
+\newenvironment{proposition}{\begin{pBox}\begin{propositionT}}{\end{propositionT}\end{pBox}}	
+
+%----------------------------------------------------------------------------------------
+%	РЕМАРКИ И АЛГОРИТМЫ
+%----------------------------------------------------------------------------------------
+
+% REMARK ENVIRONMENT
+\newenvironment{remark}{\par\vspace{3pt}\small % Vertical white space above the remark and smaller font size
+\begin{list}{}{
+\leftmargin=35pt % Indentation on the left
+\rightmargin=25pt}\item\ignorespaces % Indentation on the right
+\makebox[-2.5pt]{\begin{tikzpicture}[overlay]
+\node[inner sep=2pt,outer sep=0pt] at (-15pt,0pt){\includegraphics[width=0.75cm]{Images/nut}};\end{tikzpicture}} % Orange R in a circle
+\advance\baselineskip -1pt}{\end{list}\vskip5pt} % Tighter line spacing and white space after remark
+
+% ALGORITHM BOX
+\newtcolorbox[auto counter]{algorithm}[2][]{
+  enhanced jigsaw,
+  breakable=true,
+  before skip=20pt plus 2pt,after skip=20pt plus 2pt,
+  colback=ChadRed!5,
+  colframe=ChadRed,
+  title={\bfseries Алгоритм \thetcbcounter : #2},
+  #1
+}
+
+%----------------------------------------------------------------------------------------
+%	МАТЕМАТИЧЕСКИЕ СОКРАЩЕНИЯ
+%----------------------------------------------------------------------------------------
+
+\def\cdfeq{\mathrel{\stackrel{\mathrm{c.d.f.}}=}}
+\def\cdfcoloneqq{\mathrel{\stackrel{\mathrm{c.d.f.}}\coloneqq}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\newcommand{\St}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Trans}{\mathcal{P}}
+\newcommand{\Traj}{\mathcal{T}}
+\newcommand{\T}{\mathbb{T}}
+
+\newcommand{\Z}{\mathcal{Z}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\Argmax}{\mathop{\mathrm{Argmax}}}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+
+\newcommand{\const}{\operatorname{const}}
+\newcommand{\Loss}{\operatorname{Loss}}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\KL}{\operatorname{KL}}
+\newcommand{\Uniform}{\operatorname{Uniform}}
+
+\newcommand{\done}{\mathrm{done}}
+\newcommand{\actor}{\mathrm{actor}}
+\newcommand{\critic}{\mathrm{critic}}
+\newcommand{\old}{\mathrm{old}}
+\newcommand{\new}{\mathrm{new}}
+\newcommand{\expert}{\mathrm{expert}}
+\newcommand{\soft}{\mathrm{soft}}
+\newcommand{\intr}{\mathrm{intr}}
+\newcommand{\extr}{\mathrm{extr}}
+\newcommand{\clip}{\mathrm{clip}}
+
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\vect}{\operatorname{vec}}
+
+\usepackage{accents}
+\newcommand{\manager}[1]{\accentset{\star}{#1}}

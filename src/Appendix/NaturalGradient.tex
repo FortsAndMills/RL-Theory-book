@@ -1,0 +1,481 @@
+\section{Натуральный градиент}
+
+\subsection{Проблема параметризации}
+
+Стандартная градиентная оптимизация страдает от зависимости от параметризации. Допустим, мы градиентно оптимизируем
+$$f(x) \to \min_x ,$$
+и решили сменить параметризацию на $y = y(x)$ (допустим, даже, биективным преобразованием); задача
+$$f(y) \to \min_y ,$$
+казалось бы, эквивалентна, но траектории градиентного спуска не только будут кардинально отличаться (при эквивалентной инициализации, $x_0$ для первой задачи и $y_0 = y_0(x_0)$ для второй), но и могут сильно различаться по свойствам (в одной параметризации оптимизация проходит намного успешнее другой).
+
+Для нас обычно проблема закопана ещё чуть глубже. Оптимизируемые нами функционалы обычно имеют такой вид:
+\begin{equation}\label{NGmotivation}
+f(\phi) \coloneqq f(q(x \mid \phi)) \to \min_\phi
+\end{equation}
+где $q(x \mid \phi)$ --- некоторое параметрически заданное распределение, и функционал $F$ зависит только непосредственно от самого распределения. В качестве такого функционала обычно выступает или логарифм правдоподобия, или функция потерь для задач машинного обучения, также такой вид имеет вспомогательная функция в эволюционных стратегиях \eqref{es} и, самое главное, так выглядит и наш главный оптимизируемый функционал в обучении с подкреплением \eqref{goal}.
+
+Вспомним, как устроен градиентный спуск. Мы рассматриваем некоторую окрестность точки $\phi_0$ и хотим, основываясь на локальных свойствах функции, выбрать направление для изменения текущих параметров. Для этого функция $f(\phi)$ раскладывается в ряд Тейлора до первого члена с центром в точке $\phi_0$, и это разложение используется как приближённая модель поведения функции:
+$$\begin{cases}
+f(\phi) \approx f(\phi_0) + \langle \left. \nabla_\phi f(\phi) \right|_{\phi = \phi_0}, \phi - \phi_0 \rangle \to \min\limits_{\phi} \\
+\|\phi - \phi_0\|_2^2 < \alpha
+\end{cases}$$
+где $\alpha$ --- \ENGLISH{learning rate}, а условие $\|\phi - \phi_0\|_2^2 < \alpha$ задаёт <<\emph{регион доверия}>> (\ENGLISH{trust-region}) к построенному приближению. Понятие региона требует понятие расстояния: мы готовы отойти от текущей точки $\phi_0$ не далее чем на $\alpha$ в смысле обычного Евклидова расстояния. Аналитическое решение задачи даёт стандартную формулу градиентного спуска:
+$$\phi - \phi_0 \propto - \left. \nabla_\phi f(\phi) \right|_{\phi = \phi_0}$$
+
+Однако, в случае функционала вида \eqref{NGmotivation} параметризации $q(x \mid \phi)$ могут быть таковы, что небольшие изменения параметров $\phi$ могут радикально сильно поменять само распределение $q(x \mid \phi)$, а значит, и значение $f(q(x \mid \phi))$; и наоборот, для внесения каких-то небольших изменений в $q(x \mid \phi)$ необходимо поменять $\phi$ достаточно сильно в смысле Евклидова расстояния.
+
+\begin{example}
+$\N(0, 100)$ похож $\N(1, 100)$, когда $\N(0, 0.1)$ совсем не похоже на $\N(1, 0.1)$; при этом для обоих пар евклидово расстояние между значениями параметров равно единице.
+\end{example} 
+
+\subsection{Матрица Фишера}
+
+Оптимизация при помощи натурального градиента предлагает использовать другую метрику, которая учтёт структуру нашего функционала:
+$$\begin{cases}
+f(\phi) \approx f(\phi_0) + \langle \left. \nabla_\phi f(\phi) \right|_{\phi = \phi_0}, \phi - \phi_0 \rangle \to \min\limits_{\phi} \\
+\KL (q(x \mid \phi_0) \parallel q(x \mid \phi)) < \alpha
+\end{cases}$$
+
+Как решать такую задачу условной оптимизации? Если $\phi \approx \phi_0$, достаточно аппроксимировать дивергенцию $\KL (q(x \mid \phi_0) \parallel q(x \mid \phi))$ при помощи разложения в ряд Тейлора до второго члена. До второго --- потому что первое ноль.
+
+\begin{proposition}\,
+\begin{equation*}
+\left. \nabla_{\phi} \KL (q(x \mid \phi_0) \parallel q(x \mid \phi)) \right|_{\phi = \phi_0} = 0
+\end{equation*}
+\begin{proof}
+$\KL$-дивергенция в точке $\phi = \phi_0$ равна 0 как дивергенция между одинаковыми распределениями, следовательно как функция от $\phi$ она достигает в этой точке глобального минимума $\Rightarrow$ градиент равен нулю.
+\end{proof}
+\end{proposition}
+
+\begin{definition}
+Для распределения $q(x \mid \phi)$ \emph{матрицей Фишера} (\ENGLISH{Fisher matrix}) называется
+$$F_q(\phi) \coloneqq -\mathbb{E}_{q(x \mid \phi)} \nabla^2_\phi \log q(x \mid \phi)$$
+\end{definition}
+
+\begin{theorem}
+Матрица Фишера есть гессиан $\KL$-дивергенции:
+\begin{equation*}
+\left. \nabla^2_{\phi} \KL (q(x \mid \phi_0) \parallel q(x \mid \phi)) \right|_{\phi = \phi_0} = F_q(\phi_0) 
+\end{equation*}
+\beginproof
+\begin{equation*}
+\left. \nabla^2_{\phi} \KL (q(x \mid \phi_0) \parallel q(x \mid \phi)) \right|_{\phi = \phi_0} = \left. \nabla^2_{\phi} \left[ \const(\phi) - \mathbb{E}_{q(x \mid \phi_0)}  \log q(x \mid \phi) \right] \right|_{\phi = \phi_0} = F_q(\phi_0) \tagqed
+\end{equation*}
+\end{theorem}
+
+Прежде чем двинуться дальше, остановимся на паре важных для нас свойств матрицы Фишера.
+
+\begin{theorem}[Эквивалентное определение матрицы Фишера]\,
+\begin{equation}\label{Fishereqiv}
+F_q(\phi) \coloneqq \mathbb{E}_{q(x \mid \phi)} \nabla_\phi \log q(x \mid \phi) (\nabla_\phi \log q(x \mid \phi) )^T
+\end{equation}
+\beginproof
+\begin{align*}
+F_q(\phi) &= -\mathbb{E}_{q(x \mid \phi)} \nabla_\phi \nabla_\phi \log q(x \mid \phi) = \\
+= \{ \text{градиент логарифма} \} 
+&= -\mathbb{E}_{q(x \mid \phi)} \nabla_\phi \frac{\nabla_\phi q(x \mid \phi)}{q(x \mid \phi)} = \\
+= \{ \text{градиент отношения} \}
+&= -\mathbb{E}_{q(x \mid \phi)} \frac{\nabla^2_\phi q(x \mid \phi)}{q(x \mid \phi)} + \mathbb{E}_{q(x \mid \phi)} \frac{\nabla_\phi q(x \mid \phi)\nabla_\phi q(x \mid \phi)^T}{q(x \mid \phi)^2} = (*)
+\end{align*}
+
+Заметим, что первое слагаемое равно нулю. Действительно:
+$$\mathbb{E}_{q(x \mid \phi)} \frac{\nabla^2_\phi q(x \mid \phi)}{q(x \mid \phi)} = \int_{x} \nabla^2_\phi q(x \mid \phi) \diff x = \nabla^2_\phi \int_{x} q(x \mid \phi) \diff x = \nabla^2_\phi 1 = 0$$
+
+В оставшемся втором слагаемом перегруппируем множители (заметим, что в знаменатели дроби стоит скаляр):
+\begin{align*}
+(*) &= \mathbb{E}_{q(x \mid \phi)} \frac{\nabla_\phi q(x \mid \phi)}{q(x \mid \phi)} \left( \frac{\nabla_\phi q(x \mid \phi)}{q(x \mid \phi)} \right)^T = \\
+= \{ \text{градиент логарифма} \} 
+&= \mathbb{E}_{q(x \mid \phi)} \nabla_\phi \log q(x \mid \phi) (\nabla_\phi \log q(x \mid \phi) )^T \tagqed
+\end{align*}
+\end{theorem}
+
+\begin{proposition}
+Любая матрица Фишера симметрична и положительно определена.
+\end{proposition}
+
+\begin{theoremBox}{Репараметризация матрицы Фишера}
+\setcounter{footnote}{1}
+
+Пусть одно распределение параметризовано двумя способами, а то есть $q_\phi(x \mid \phi) \HM\equiv q_\nu(x \mid \nu)$, где $\nu = \nu(\phi)$ --- преобразование с якобианом\footnote[1]{будем считать, что якобиан имеет размер $h_\phi \times h_\nu$, где $h_\nu, h_\phi$ --- размерности $\nu$ и $\phi$ соответственно.} $J$. Тогда:
+\begin{equation}\label{Fisherreparam}
+F_q(\phi) = JF_q(\nu)J^T
+\end{equation}
+\beginproof
+\begin{align*}
+F_q(\phi) &= \E_{q_\phi(x \mid \phi)} (\nabla_\phi \log q(x \mid \phi)) (\nabla_\phi \log q(x \mid \phi) )^T = \\
+= \{ q_\phi(x \mid \phi) \equiv q_\nu(x \mid \nu) \} 
+&= \E_{q_\nu(x \mid \nu)} (\nabla_\phi \log q(x \mid \nu)) (\nabla_\phi \log q(x \mid \nu) )^T = \\
+= \{ \text{chain rule} \}
+&= \E_{q_\phi(x \mid \phi)} J \nabla_\nu \log q(x \mid \nu) (\nabla_\nu \log q(x \mid \nu) )^T J^T = \\
+&= JF_q(\nu)J^T \tagqed
+\end{align*}
+\end{theoremBox}
+
+\subsection{Натуральный градиент}
+
+Итак, приближённая задача выглядит следующим образом:
+$$\begin{cases}
+f(\phi) \approx f(\phi_0) + \langle \left. \nabla_\phi f(\phi) \right|_{\phi = \phi_0}, \phi - \phi_0 \rangle \to \min\limits_{\phi} \\
+(\phi - \phi_0)^T F_q(\phi_0) (\phi - \phi_0) < \alpha
+\end{cases}$$
+По сути, матрица Фишера задаёт нам приближённо метрику\footnote{А точнее, \emph{Римановскую метрику}. В Евклидовом пространстве общей формой скалярного произведения является $\langle x, y \rangle \coloneqq x^TGy$, где $G$ --- некоторая фиксированная положительно определённая матрица, и индуцированной метрикой соответственно является $d(x, y)^2 \coloneqq  (y - x)^T G (y - x)$. В Римановском пространстве $G$, называемая также \emph{метрическим тензором} (\ENGLISH{metric tensor}), зависит от $x$, и относительное расстояние между точками зависит от положения в пространстве. Римановские пространства используются для описания расстояний между точками на поверхностях, а метрические тензоры для них обладают рядом приятных свойств, которыми, в частности, обладает и матрица Фишера.}, индуцированную $\KL$-дивергенцией. Такая задача также решается аналитично и получается приятный ответ:
+\begin{equation}\label{naturalgradient}
+\phi - \phi_0 \propto -F_q(\phi_0)^{-1} \left. \nabla_\phi f(\phi) \right|_{\phi = \phi_0}
+\end{equation}
+
+\begin{definition}
+\emph{Натуральным градиентом} (\ENGLISH{natural gradient}) функции $f(\phi) \coloneqq f(q(x \mid \phi))$ называется
+$$\tilde{\nabla}_\phi f(\phi) \coloneqq F_q(\phi)^{-1} \nabla_\phi f(\phi)$$
+\end{definition}
+
+Итак, натуральный градиент есть скорректированный матрицей Фишера обычный градиент. Он очень напоминает методы оптимизации второго порядка, так как происходит учёт вида оптимизируемой функции, в том числе масштабирование по осям.
+
+\begin{theorem}[Инвариантность натурального градиента относительно параметризации]
+Пусть одно распределение параметризовано двумя способами, а то есть $q_\phi(x \mid \phi) \HM\equiv q_\nu(x \mid \nu)$, где $\nu = \nu(\phi)$ --- преобразование с якобианом $J$.
+
+Тогда натуральные градиенты указывают в одном и том же направлении:
+$$\tilde{\nabla}_\phi f(\nu) = J^T \tilde{\nabla}_\phi f(\phi)$$
+\beginproof
+\begin{align*}
+J^T \tilde{\nabla}_\phi f(\phi) &= J^T F_q(\phi)^{-1} \nabla_\phi f(\phi) = \\
+= \{ \text{репараметризация матрицы Фишера (\ref{Fisherreparam})} \} 
+&= J^T \left( JF_q(\nu)J^T \right) ^{-1} \nabla_\phi f(\phi) \\
+= \{ \text{свойства обратной матрицы} \}
+&= J^T J^{-T}F_q(\nu)^{-1}J^{-1} \nabla_\phi f(\phi) \\
+= \{ \text{chain rule} \}
+&= F_q(\nu)^{-1}J^{-1} J \nabla_\nu f(\nu) = \\
+&= F_q(\nu)^{-1} \nabla_\nu f(\nu) = \\
+&= \tilde{\nabla}_\nu f(\nu) \tagqed
+\end{align*}
+\end{theorem}
+
+% Application of natural gradient descent in DRL setting is complicated in practice. Theoretically, the only change that must be done is scaling of gradient using inverse Fisher matrix (\ref{naturalgradient}). Yet, Fisher matrix requires $n^2$ memory and $\mathcal{O}(n^3)$ computational costs for inversion where $n$ is the number of parameters. For neural networks this causes the same complications as the application of second-order optimization methods.
+
+% K-FAC optimization method \citep{martens2015optimizing} provides a specific approximation form of Fisher matrix for neural networks with linear layers which can be efficiently computed, stored and inverted. Usage of K-FAC approximation allows to compute natural gradient directly using (\ref{naturalgradient}).
+
+\section{Обоснование формул CMA-ES}
+
+В данном разделе мы вычислим формулу натурального градиента для оптимизации вспомогательного функционала
+\begin{equation}\label{appendix_es}
+g(\lambda) \coloneqq \E_{\theta \sim q(\theta \mid \lambda)} J(\theta) \to \max_{\lambda},
+\end{equation}
+для эволюционной стратегии $q(\theta \mid \lambda) \coloneqq \N(\mu, \Sigma)$ с параметрами $\lambda \coloneqq (\mu, \Sigma)$.
+
+\subsection{Вычисление градиента}\label{cmaeslikelihoodgrads}
+
+Сначала нам придётся напрячься и продифференцировать логарифм правдоподобия по параметрам $\mu$ и $\Sigma$:
+$$\log q(\theta \mid \mu, \Sigma) = \const(\mu, \Sigma) - \frac{1}{2} \log \det \Sigma - \frac{1}{2}(\theta - \mu)^T\Sigma^{-1}(\theta - \mu)$$
+
+Поскольку нам придётся дифференцировать функционал по матрице, вычислять градиенты удобно в терминах дифференциала. Будем использовать следующую нотацию: будем обозначать за $D_x f(x)[h]$ дифференциал функции $f(x)$ по переменной $x$ с приращением $h$. Дифференциал имеет ту же размерность, что и выход функции $f$, что и делает его использование таким удобным. В итоге мы должны получить линейную часть приращения $f(x)$; так, в итоге вычислений мы получим представление дифференциала в виде $D_x f(x)[h] = \langle \nabla_x f(x), h \rangle$ и сможем <<вытащить>> градиент.
+
+\begin{proposition}\,
+$$\nabla_\mu \log q(\theta \mid \mu, \Sigma) = \Sigma^{-1}(\theta - \mu)$$
+\begin{proof}
+$$D_\mu \log q(\theta \mid \mu, \Sigma)[h] = \frac{1}{2}h^T\Sigma^{-1}(\theta - \mu) + \frac{1}{2}(\theta - \mu)^T\Sigma^{-1}h = \langle \Sigma^{-1}(\theta - \mu), h \rangle$$
+
+Отсюда получаем градиент как вектор, скалярно перемножаемый на приращение $h$: $\Sigma^{-1}(\theta - \mu)$.
+\end{proof}
+\end{proposition}
+
+Для $\Sigma$ нам понадобится пара табличных формул векторного дифференцирования (здесь $\Tr$ --- оператор взятия \href{https://ru.wikipedia.org/wiki/След_матрицы}{следа матрицы}):
+\begin{equation}\label{logdetdiff}
+D_\Sigma \log \det \Sigma [H] = \Tr(\Sigma^{-1}H)
+\end{equation}
+\begin{equation}\label{inversediff}
+D_\Sigma \Sigma^{-1} [H] = -\Sigma^{-1}H\Sigma^{-1}
+\end{equation}
+
+\begin{proposition}\, 
+$$\nabla_\Sigma \log q(\theta \mid \mu, \Sigma) = -\frac{1}{2}\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}(\theta - \mu)(\theta - \mu)^T\Sigma^{-1}$$
+\begin{proof}
+\begin{align*}
+D_\Sigma \log q(\theta \mid \mu, \Sigma)[H] &= - \frac{1}{2} D_\Sigma \log \det \Sigma [H] - \frac{1}{2}(\theta - \mu)^T D_\Sigma \Sigma^{-1} [H] (\theta - \mu)\\
+= \{ \text{подставляем формулы \eqref{logdetdiff} и \eqref{inversediff}} \}
+&= - \frac{1}{2} \Tr(\Sigma^{-1}H) + \frac{1}{2}(\theta - \mu)^T \Sigma^{-1}H\Sigma^{-1} (\theta - \mu)\\
+= \{ \text{фокус: если $v$ --- скаляр, $v = \Tr(v)$} \}
+&= - \frac{1}{2} \Tr(\Sigma^{-1}H) + \frac{1}{2}\Tr \left( (\theta - \mu)^T \Sigma^{-1}H\Sigma^{-1} (\theta - \mu) \right) = \\
+= \{ \text{тождество $\Tr(ABC) = \Tr(BCA)$} \}
+&= - \frac{1}{2} \Tr(\Sigma^{-1}H) + \frac{1}{2}\Tr \left( \Sigma^{-1}(\theta - \mu)(\theta - \mu)^T\Sigma^{-1}H \right)
+\end{align*}
+
+Дифференциал --- это скалярное произведение градиента на приращение $H$, которое в пространстве матриц задано оператором $\Tr$.
+\end{proof}
+\end{proposition}
+
+Из этих формул можно увидеть, почему градиентный подъём для оптимизации \eqref{appendix_es} по $\mu, \Sigma$ не так хорош. Допустим, матрица ковариации адаптировалась так, что вдоль оси $\theta_0$ разброс большой. Пусть где-то справа нашлись особи с огромным $J(\theta)$; тогда взвешенное среднее
+$$\frac{1}{N}\sum_{\theta \in \Pop} J(\theta)\theta$$
+будет указывать примерно в центр этого скопления, будет говорить сильно увеличить компоненту $\theta_0$. Однако, формула градиента говорит сделать поправку на матрицу ковариации: мол, мы генерировали вдоль $\theta_0$ с большим разбросом, и поэтому вдоль этой оси градиент нужно пропорционально сбить. В итоге, к центру скопления делается куда меньший шаг, чем по идее должен был бы по итогам генерации целого поколения особей. Примерно тоже самое наблюдается с матрицей ковариации: в формуле также делается поправка на текущее значение матрицы ковариации (домножение на $\Sigma^{-1}$ с двух сторон) вместо движения к эмпирической (взвешанной на $\hat{J}(\theta)$) матрице.
+
+\subsection{Произведение Кронекера}
+
+Нам понадобится работать с матрицей Фишера, которая имеет размерность <<количество параметров на количество параметров>>. Иными словами, нам понадобится сравнивать попарно между собой все элементы матрицы $\Sigma$, а это значит, нам придётся чуть-чуть залезть в \href{https://ru.wikipedia.org/wiki/Произведение_Кронекера}{алгебру Кронекера}. Для этого мы введём операцию \emph{векторизации матрицы} $\vect$, вытягивающей все элементы матрицы в вектор. 
+
+\begin{proposition}
+Векторизация --- линейная операция; поэтому, в частности:
+\begin{equation}\label{exp_in_vec}
+    \E_\theta \vect (f(\theta)) = \vect(\E_\theta f(\theta))
+\end{equation}
+\begin{equation}\label{nab_in_vec}
+    \nabla_{\vect(\Sigma)} f(\Sigma) = \vect(\nabla_\Sigma f(\Sigma))
+\end{equation}
+\begin{proof}
+Можно проверить непосредственно: мы просто переписываем все элементы матрицы в другой форме, сложению и умножению на скаляры всё равно.
+\end{proof}
+\end{proposition}
+
+\begin{definition}
+Произведением Кронекера двух матриц $A \in \R^{n \times m}, B \in \R^{p \times q}$ называется
+$$A \otimes B \coloneqq 
+\begin{pmatrix}
+a_{11}B & \dots & a_{1m}B \\
+\vdots & \ddots & \vdots \\
+a_{n1}B & \dots & a_{nm}B
+\end{pmatrix}
+\in \R^{np \times mq},$$
+где $a_{ij}$ --- элементы матрицы $A$.
+\end{definition}
+
+\begin{example}
+\begin{align*} 
+\begin{pmatrix}
+3 & 0 \\
+1 & -2
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+4 & 0 & -1 \\
+-4 & 2 & 5 
+\end{pmatrix} 
+&=
+\begin{pmatrix}
+3 \begin{pmatrix}
+4 & 0 & -1 \\
+-4 & 2 & 5 
+\end{pmatrix} & 0 \begin{pmatrix}
+4 & 0 & -1 \\
+-4 & 2 & 5 
+\end{pmatrix} \\
+1 \begin{pmatrix}
+4 & 0 & -1 \\
+-4 & 2 & 5 
+\end{pmatrix} & -2 \begin{pmatrix}
+4 & 0 & -1 \\
+-4 & 2 & 5 
+\end{pmatrix}
+\end{pmatrix} = \\
+&=
+\begin{pmatrix}
+12 & 0 & -3 & 0 & 0 & 0 \\
+-12 & 6 & 15 & 0 & 0 & 0 \\
+4 & 0 & -1 & -8 & 0 & 2 \\
+-4 & 2 & 5 & 8 & -4 & -10
+\end{pmatrix}
+\end{align*}
+\end{example}
+
+\begin{theorem}Для матриц $A, B, C, D$ с размерностями, для которых существует произведения $AC$ и $BD$, верно:
+\begin{equation}\label{kroneckermixproducts}
+(A \otimes B)(C \otimes D) = AC \otimes BD
+\end{equation}
+\begin{proof}
+Проверяется непосредственно: пусть $a_{ij}$ --- элементы матрицы $A \in \R^{n \times m}$, $c_{ij}$ --- элементы матрицы $C \in \R^{m \times q}$, тогда:
+\begin{align*}(A \otimes B)(C \otimes D) &=
+\begin{pmatrix}
+a_{11}B & \dots & a_{1m}B \\
+\vdots & \ddots & \vdots \\
+a_{n1}B & \dots & a_{nm}B
+\end{pmatrix}
+\begin{pmatrix}
+c_{11}D & \dots & c_{1q}D \\
+\vdots & \ddots & \vdots \\
+c_{m1}D & \dots & c_{mq}D
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+\sum_{k = 1}^m a_{1k}Bc_{k1}D & \dots & \sum_{k = 1}^m a_{1k}Bc_{kq}D \\
+\vdots & \ddots & \vdots \\
+\sum_{k = 1}^m a_{nk}Bc_{k1}D & \dots & \sum_{k = 1}^m a_{nk}Bc_{kq}D
+\end{pmatrix}
+\end{align*}
+
+Вводя обозначение $e_{ij} = \sum_{k = 0}^m a_{ik}c_{kj}$, получаем Кронекерово произведение между матрицей $E$, состоящей из этих элементов, и матрицей $BD$. Осталось заметить, что матрица $E = AC$ по определению.
+\end{proof}
+\end{theorem}
+
+\begin{proposition} Для обратимых матриц $A$, $B$:
+\begin{equation}\label{kroneker_inverse}
+(A \otimes B)^{-1} = A^{-1} \otimes B^{-1}
+\end{equation}
+\beginproof[Пояснение]
+\begin{align*}
+(A^{-1} \otimes B^{-1})(A \otimes B) = A^{-1}A \otimes B^{-1}B = I \otimes I = I \tagqed 
+\end{align*}
+\end{proposition}
+
+\begin{theorem}Для матриц $A, B, C$, для которых существует произведение $ABC$, верно:
+\begin{equation}\label{kronecker_vect}
+\vect (ABC) = (C^T \otimes A)\vect(B)
+\end{equation}
+\begin{proof} Проверяется непосредственно. Пусть $c_{ij}$ --- элементы матрицы $C$, $b_i$ --- строки матрицы $B$. Тогда $\vect(B) = (b_1, b_2 \dots b_m)^T$, и:
+\begin{align*}(C^T \otimes A)\vect(B) &=
+\begin{pmatrix}
+c_{11}A & \dots & c_{m1}A \\
+\vdots & \ddots & \vdots \\
+c_{1n}A & \dots & c_{mn}A
+\end{pmatrix}
+\begin{pmatrix}
+b_1^T \\
+\vdots\\
+b_m^T
+\end{pmatrix}
+=
+\begin{pmatrix}
+\sum_{i=1}^{m} c_{i1}Ab_i^T \\
+\vdots \\
+\sum_{i=1}^{m} c_{in}Ab_i^T \\
+\end{pmatrix}
+\end{align*}
+
+Осталось заметить, что $\sum_{i=1}^{m} c_{ij}Ab_i^T$ есть транспонированная $j$-ая строчка матрицы $ABC$.
+
+\end{proof}
+\end{theorem}
+
+\subsection{Вычисление матрицы Фишера}
+
+Получение матрицы Фишера для нормального распределения представляет собой напряжное техническое упражнение. Будем далее считать, что наш набор параметров есть $\lambda \coloneqq (\mu, \vect(\Sigma))$; тогда матрица Фишера для нас будет матрицей, размера $(h + h^2) \times (h + h^2)$. Представим её в блочно-диагональном виде:
+$$F_q(\lambda) =
+\begin{pmatrix}
+F_{\mu \mu} & F_{\mu \vect{\Sigma}} \\
+F_{\mu \vect{\Sigma}}^T & F_{\vect{\Sigma} \vect{\Sigma}}
+\end{pmatrix}
+$$
+где $F_{\mu \mu} \in \R^{h \times h}$, $F_{\vect{\Sigma} \vect{\Sigma}} \in \R^{h^2 \times h^2}$. Мы воспользовались симметричностью матрицы Фишера (что было видно из её эквивалентного определения \eqref{Fishereqiv}).
+
+Будем искать эти блоки по одному. Для удобства введём обозначение
+$$S \coloneqq (\theta - \mu)(\theta - \mu)^T$$
+и продублируем формулы градиентов логарифма правдоподобия, полученные в разделе \ref{cmaeslikelihoodgrads}:
+\begin{equation}\label{cmaes_mu_grad}
+\nabla_\mu \log q(\theta \mid \mu, \Sigma) = \Sigma^{-1}(\theta - \mu)
+\end{equation}
+\begin{equation}\label{cmaes_sigma_grad}
+\nabla_\Sigma \log q(\theta \mid \mu, \Sigma) = -\frac{1}{2}\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}S\Sigma^{-1}\end{equation}
+
+Заметим, что по свойствам нормального распределения:
+$$\E_{\theta} \theta = \mu \qquad \E_{\theta} S = \Sigma$$
+
+\begin{theorem}
+Матрица Фишера для нормального распределения имеет вид:
+$$
+F_q(\lambda) =
+\begin{pmatrix}
+\Sigma^{-1} & 0 \\
+0 & \frac{1}{2}\left(\Sigma^{-1} \otimes \Sigma^{-1} \right)
+\end{pmatrix}
+$$
+\beginproof[Доказательство для $F_{\mu\mu}$]
+\begin{equation*}
+F_{\mu\mu} = -\E_{\theta} \nabla^2_\mu \log q(\theta \mid \mu, \Sigma) = \{ \text{\eqref{cmaes_mu_grad}} \} = -\E_{\theta} \nabla_\mu \Sigma^{-1}(\theta - \mu) = \E_{\theta} \Sigma^{-1} = \Sigma^{-1} \tagqed
+\end{equation*}
+
+\begin{proof}[Доказательство для $F_{\mu \vect{\Sigma}}$]
+Сначала посчитаем вторую производную.
+$$D_\Sigma \nabla_\mu \log q(\theta \mid \mu, \Sigma) [H]= \{ \text{\eqref{cmaes_mu_grad}} \} = -D_\Sigma \Sigma^{-1} (\theta - \mu) [H] = \{ \text{\eqref{inversediff}} \} = \Sigma^{-1}H\Sigma^{-1}(\theta - \mu)$$
+
+Тут дальше есть проблема: нас, вообще говоря, интересует градиент. Однако производная вектора $\nabla_\mu \log q(\theta \mid \mu, \Sigma)$ по матрице это трёхмерный тензор, и надо танцевать с векторизацией. Мы схитрим: давайте посмотрим на мат.ожидание дифференциала по $\theta$:
+$$-\E_\theta \Sigma^{-1}H\Sigma^{-1}(\theta - \mu) = -\Sigma^{-1}H\Sigma^{-1} \E_\theta(\theta - \mu) = 0$$
+Как следствие, это нулевой тензор, и матрица Фишера тоже ноль.
+\end{proof}
+
+\beginproof[Доказательство для $F_{\vect{\Sigma} \mu}$ (Sanity check)]
+Проверим, что и симметричный блок тоже ноль (формально это уже доказано в силу симметрии). Для этого нужно дифференцировать по $\mu$ первую производную по $\Sigma$  \eqref{cmaes_sigma_grad}. Сразу же будем смотреть на мат.ожидание этого выражения по $\theta$:
+$$-\E_\theta D_\mu \nabla_\Sigma \log q(\theta \mid \mu, \Sigma) [h] = \frac{1}{2}\Sigma^{-1} \E_\theta D_\mu S [h] \Sigma^{-1}$$
+
+При этом $\E_\theta D_\mu S [h] = 0$, поскольку:
+\begin{equation*}
+\E_\theta D_\mu S [h] = -\E_\theta h(\theta - \mu)^T - \E_\theta (\theta - \mu)h^T = 0 \tagqed
+\end{equation*}
+
+\begin{proof}[Доказательство для $F_{\vect{\Sigma} \vect{\Sigma}}$]
+\begin{align*}
+&-\E_\theta D_{\Sigma} \nabla_{\vect{\Sigma}} \log q(\theta \mid \mu, \Sigma) [H] = \\
+= &-\E_\theta D_{\Sigma} \vect \left( \nabla_\Sigma \log q(\theta \mid \mu, \Sigma) \right) [H] = \\
+= & \{ \text{подставляем \eqref{cmaes_sigma_grad}} \} = \\
+= &-\E_\theta D_{\Sigma} \vect \left( -\frac{1}{2}\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}S\Sigma^{-1} \right) [H] = \\
+= & \{ \text{вносим минус, $D$ и $\E_{\theta}$} \} = \\
+= &\vect \left( \frac{1}{2}D_{\Sigma}\Sigma^{-1}[H] - \frac{1}{2} \E_\theta D_{\Sigma} \left( \Sigma^{-1}S\Sigma^{-1} \right) [H] \right) = \\
+= & \{ \text{дифф. билинейной функции} \} = \\
+= &\vect \left( \frac{1}{2}D_{\Sigma}\Sigma^{-1}[H] - \frac{1}{2}D_\Sigma \Sigma^{-1} [H] \E_\theta S \Sigma^{-1} - \frac{1}{2}\Sigma^{-1}\E_\theta S D_\Sigma \Sigma^{-1}[H] \right) = \\
+= & \{ \text{дифф. обратной матрицы \eqref{inversediff}} \} = \\
+= &\vect \left( -\frac{1}{2}\Sigma^{-1}H\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}H\Sigma^{-1}\E_\theta S \Sigma^{-1} + \frac{1}{2}\Sigma^{-1}\E_\theta S \Sigma^{-1}H\Sigma^{-1} \right) = \\
+= \{ \E_\theta S = \Sigma \}
+= & \vect \left( -\frac{1}{2}\Sigma^{-1}H\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}H\Sigma^{-1} + \frac{1}{2} \Sigma^{-1}H\Sigma^{-1} \right) = \\
+= & \frac{1}{2} \vect \left( \Sigma^{-1}H\Sigma^{-1} \right) = \\
+= \{ \text{свойство \eqref{kronecker_vect}} \}
+= & \frac{1}{2} (\Sigma^{-1} \otimes \Sigma^{-1}) \vect (H)
+\end{align*}
+
+Приращение вектора, полученное в виде умножения матрицы на векторизацию приращения, эквивалентно тому, что функция под дифференциалом рассматривалась бы как функция от $\vect{\Sigma}$:
+$$\E_\theta D_{\vect{\Sigma}} \nabla_{\vect{\Sigma}} \log q(\theta \mid \mu, \Sigma) [\vect{H}] = \frac{1}{2} (\Sigma^{-1} \otimes \Sigma^{-1}) \vect (H)$$
+
+Отсюда $F_{\vect{\Sigma}\vect{\Sigma}} = \frac{1}{2}\left(\Sigma^{-1} \otimes \Sigma^{-1} \right).$
+\end{proof}
+\end{theorem}
+
+\begin{proposition}
+Обратная матрица Фишера для нормального распределения имеет вид:
+\begin{equation}\label{inversenormalFisher}
+F_q^{-1}(\lambda) =
+\begin{pmatrix}
+\Sigma & 0 \\
+0 & 2\left(\Sigma \otimes \Sigma \right)
+\end{pmatrix}
+\end{equation}
+\begin{proof}[Пояснение]
+Для обращения нижнего блока применить формулу \eqref{kroneker_inverse}.
+\end{proof}
+\end{proposition}
+
+\subsection{Covariance Matrix Adaptation Evolution Strategy (CMA-ES)}
+
+Вспомним общую формулу градиента для эволюционных стратегий:
+\begin{equation}\label{appendix_ESgradient}
+    \nabla_\lambda g(\lambda) = \E_{\theta \sim q(\theta \mid \lambda)} \nabla_\lambda \log q(\theta \mid \lambda) J(\theta)
+\end{equation}
+
+Достаточно домножить её на обратную матрицу Фишера, чтобы получить формулу натурального градиента для обновления $\lambda = (\mu, \Sigma)$.
+
+\begin{theorem}
+Натуральный градиент для $\mu$ в \eqref{appendix_es} выглядит так:
+$$\tilde{\nabla}_\mu g(\mu, \Sigma) = \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) (\theta - \mu)$$
+\beginproof
+\begin{align*}
+\tilde{\nabla}_\mu g(\mu, \Sigma) &= F^{-1}_{\mu \mu} \nabla_\mu g(\mu, \Sigma) = \\
+= \{ \text{подставляем \eqref{appendix_ESgradient}} \}
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) F^{-1}_{\mu \mu} \nabla_\mu \log q(\theta \mid \mu, \Sigma) = \\
+&= \{ \text{подставляем $F^{-1}_{\mu \mu}$ из \eqref{inversenormalFisher} и градиент из \eqref{cmaes_mu_grad}} \} = \\
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) \Sigma \Sigma^{-1} (\theta - \mu) = \\ 
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) (\theta - \mu)  \tagqed
+\end{align*}
+\end{theorem}
+
+Заметим, что для OpenAI-ES \ref{openai_es} при константной матрице ковариации натуральный градиент и градиент отличаются на константу (она <<сокращается с learning rate>>); поэтому можно считать, что OpenAI-ES есть тоже алгоритм натуральной эволюционной стратегии.
+
+\begin{theorem}
+Натуральный градиент для $\Sigma$ в \eqref{appendix_es} выглядит так:
+$$\tilde{\nabla}_{\Sigma} g(\mu, \Sigma) = \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) (S - \Sigma)$$
+\begin{proof}
+\begin{align*}
+\tilde{\nabla}_{\vect(\Sigma)} g(\mu, \Sigma) &= F^{-1}_{\vect(\Sigma) \vect(\Sigma)} \nabla_{\vect(\Sigma)} g(\mu, \Sigma) = \\
+= \{ \text{подставляем \eqref{appendix_ESgradient}} \}
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) F^{-1}_{\vect(\Sigma) \vect(\Sigma)} \vect \left( \nabla_\Sigma \log q(\theta \mid \mu, \Sigma) \right) = \\
+&= \{ \text{подставляем $F^{-1}_{\vect(\Sigma) \vect(\Sigma)}$ из \eqref{inversenormalFisher} и градиент из \eqref{cmaes_sigma_grad}} \} = \\
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) \left(\Sigma \otimes \Sigma \right) \vect \left( \Sigma^{-1}S\Sigma^{-1} - \Sigma^{-1} \right) = \\
+= \{ \text{свойство \eqref{kroneckermixproducts} } \}
+&= \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) \vect \left( \Sigma\Sigma^{-1}S\Sigma^{-1}\Sigma - \Sigma\Sigma^{-1}\Sigma \right) = \\ 
+&= \vect \left( \frac{1}{N}\sum_{\theta \in \Pop} \hat{J}(\theta) (S - \Sigma) \right)
+\end{align*}
+
+Отсюда, убирая векторизацию, получаем формулу.
+\end{proof}
+\end{theorem}
