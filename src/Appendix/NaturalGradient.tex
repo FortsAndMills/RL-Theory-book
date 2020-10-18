@@ -402,7 +402,7 @@ $$-\E_\theta D_\mu \nabla_\Sigma \log q(\theta \mid \mu, \Sigma) [h] = \frac{1}{
 = &-\E_\theta D_{\Sigma} \vect \left( \nabla_\Sigma \log q(\theta \mid \mu, \Sigma) \right) [H] = \\
 = & \{ \text{подставляем \eqref{cmaes_sigma_grad}} \} = \\
 = &-\E_\theta D_{\Sigma} \vect \left( -\frac{1}{2}\Sigma^{-1} + \frac{1}{2}\Sigma^{-1}S\Sigma^{-1} \right) [H] = \\
-= & \{ \text{вносим минус, $D$ и $\E_{\theta}$} \} = \\
+= & \{ \text{вносим минус, $D_{\Sigma}$ и $\E_{\theta}$} \} = \\
 = &\vect \left( \frac{1}{2}D_{\Sigma}\Sigma^{-1}[H] - \frac{1}{2} \E_\theta D_{\Sigma} \left( \Sigma^{-1}S\Sigma^{-1} \right) [H] \right) = \\
 = & \{ \text{дифф. билинейной функции} \} = \\
 = &\vect \left( \frac{1}{2}D_{\Sigma}\Sigma^{-1}[H] - \frac{1}{2}D_\Sigma \Sigma^{-1} [H] \E_\theta S \Sigma^{-1} - \frac{1}{2}\Sigma^{-1}\E_\theta S D_\Sigma \Sigma^{-1}[H] \right) = \\

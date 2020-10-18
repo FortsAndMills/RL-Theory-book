@@ -123,10 +123,10 @@ $$d_\infty(V_1, V_2) \coloneqq \max_s | V_1(s) - V_2(s) |$$
 
 \begin{algorithm}[label=policyevaluation]{Policy Evaluation}
 \textbf{Вход:} $\pi(a \mid s)$ --- стратегия \\
-\textbf{Гиперпараметры:} $\eps$ --- критерий останова.
+\textbf{Гиперпараметры:} $\eps$ --- критерий останова
 
 \vspace{0.3cm}
-Инициализируем $V_0(s)$ произвольно для всех $s \in \St$. \\
+Инициализируем $V_0(s)$ произвольно для всех $s \in \St$ \\
 \textbf{На $k$-ом шаге:}
 \begin{enumerate}
     \item $\forall s \colon V_{k+1}(s) \coloneqq \E_{a} \left[ r(s, a) + \gamma \E_{s'} V_k(s')\right]$
@@ -151,11 +151,11 @@ $$d_\infty(V_1, V_2) \coloneqq \max_s | V_1(s) - V_2(s) |$$
 % Удобен схожий алгоритм\footnote{не могу найти внятного объяснения, почему этот переход ничего не ломает, но кажется, что это так.}, позволяющий не хранить целиком $V_k$ для расчёта $V_{k+1}$, а проводить все вычисления по одной таблице:
 
 % \begin{algorithm}{Iterative Policy Evaluation}
-% \textbf{Гиперпараметры: } $\varepsilon$ --- критерий останова. \\
-% \textbf{Вход:} $\pi(a \mid s)$ --- стратегия.
+% \textbf{Вход:} $\pi(a \mid s)$ --- стратегия \\
+% \textbf{Гиперпараметры: } $\varepsilon$ --- критерий останова
 
 % \vspace{0.3cm}
-% Инициализируем $V(s)$ произвольно для всех $s \in \St$. \\
+% Инициализируем $V(s)$ произвольно для всех $s \in \St$ \\
 % \textbf{На $k$-ом шаге:}
 % \begin{enumerate}
 %     \item храним максимальное изменение на данном шаге $\delta_k \coloneqq 0$
@@ -233,10 +233,10 @@ $$d_\infty(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) - Q_2(s, a) |$$
 Вообще, если известна динамика среды, то нам достаточно решить уравнения оптимальности для $V^*$ --- это потребует меньше переменных. Итак, в табличном случае мы можем напрямую методом простой итерации решать уравнения оптимальности Беллмана и в пределе сойдёмся к оптимальной оценочной функции, которая тут же даёт нам оптимальную стратегию.
 
 \begin{algorithm}[label=valueiteration]{Value Iteration}
-\textbf{Вход:} $\varepsilon$ --- критерий останова.
+\textbf{Вход:} $\varepsilon$ --- критерий останова
 
 \vspace{0.3cm}
-Инициализируем $V^*_0(s)$ произвольно для всех $s \in \St$. \\
+Инициализируем $V^*_0(s)$ произвольно для всех $s \in \St$ \\
 \textbf{На $k$-ом шаге:}
 \begin{enumerate}
     \item для всех $s$: $V^*_{k+1}(s) \leftarrow \max\limits_a \left[ r(s, a) + \gamma \E_{s'} V^*_k(s')\right]$
@@ -247,7 +247,7 @@ $$d_\infty(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) - Q_2(s, a) |$$
 \textbf{Выход:} $\pi(s) \coloneqq \argmax\limits_a \left[ r(s, a) + \gamma \E_{s'} V^*(s')\right]$
 \end{algorithm}
 
-\needspace{7\baselineskip}
+%\needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.35\textwidth}
 %\vspace{-0.3cm}
 \centering
@@ -266,10 +266,10 @@ $$d_\infty(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) - Q_2(s, a) |$$
 \end{exampleBox}
 
 % \begin{algorithm}[label=valueiteration]{Value Iteration}
-% \textbf{Вход:} $\varepsilon$ --- критерий останова.
+% \textbf{Вход:} $\varepsilon$ --- критерий останова
 
 % \vspace{0.3cm}
-% Инициализируем $V^*(s)$ произвольно для всех $s \in \St$. \\
+% Инициализируем $V^*(s)$ произвольно для всех $s \in \St$ \\
 % \textbf{На $k$-ом шаге:}
 % \begin{enumerate}
 %     \item храним максимальное изменение $\delta_k \coloneqq 0$
@@ -321,10 +321,10 @@ $$\pi_k \succ \pi_{k-1} \succ \dots \succ \pi_0$$
 \end{theorem}
 
 \begin{algorithm}[label=policyiteration]{Policy Iteration}
-\textbf{Гиперпараметры:} $\eps$ --- критерий останова для процедуры $\operatorname{PolicyEvaluation}$.
+\textbf{Гиперпараметры:} $\eps$ --- критерий останова для процедуры $\operatorname{PolicyEvaluation}$
 
 \vspace{0.3cm}
-Инициализируем $\pi_0(s)$ произвольно для всех $s \in \St$. \\
+Инициализируем $\pi_0(s)$ произвольно для всех $s \in \St$ \\
 \textbf{На $k$-ом шаге:}
 \begin{enumerate}
     \item $V^{\pi_k} \coloneqq \operatorname{PolicyEvaluation}(\pi_k, \eps)$
@@ -357,10 +357,10 @@ $$\pi_k \succ \pi_{k-1} \succ \dots \succ \pi_0$$
 Но рассмотрим такую, пока что, эвристику: давайте останавливать Policy Evaluation после ровно $N$ шагов, а после обновления стратегии не начинать оценивать $\pi_{k+1}$ с нуля, а использовать $V^{\pi_{k}}$ в качестве инициализации. Мы формально потеряем гарантии улучшения стратегии на этапе Policy Improvement, поэтому останавливать алгоритм после того, как стратегия не изменилась, уже нельзя: возможно, после следующих $N$ шагов обновления оценочной функции, аргмакс поменяется. Тогда наш алгоритм примет следующий вид: 
 
 \begin{algorithm}[label=generalizedpolicyiteration]{Generalized Policy Iteration}
-\textbf{Гиперпараметры:} $N$ --- количество шагов.
+\textbf{Гиперпараметры:} $N$ --- количество шагов
 
 \vspace{0.3cm}
-Инициализируем $\pi(s)$ произвольно для всех $s \in \St$. \\
+Инициализируем $\pi(s)$ произвольно для всех $s \in \St$ \\
 \textbf{На $k$-ом шаге:}
 \begin{enumerate}
     \item \textbf{Повторить $N$ раз:}
