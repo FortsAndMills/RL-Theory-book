@@ -1,1 +1,25 @@
-# RL-Theory-book
+# RL-Theory-book (rus)
+
+- [x] Ch. 1: Introduction
+- [x] Ch. 2: Meta-heuristics
+    - [x] NEAT, WANN
+    - [x] CEM, OpenAI-ES, CMA-ES
+- [x] Ch. 3: Classic theory
+    - [x] Bellman equations
+    - [x] RPI, policy improv. theorem
+    - [x] Value Iteration, Policy Iteration
+    - [x] Temporal Difference, Q-learning, SARSA
+- [x] Ch. 4: Value-based
+    - [x] DQN
+    - [x] Double DQN, Dueling DQN, PER, Noisy DQN, Multi-step DQN
+    - [x] c51, QR-DQN, IQN, Rainbow DQN
+- [ ] Ch. 5: Policy Gradient
+    - [ ] REINFORCE, A2C
+    - [ ] TRPO, PPO
+- [ ] Ch. 6: Continuous Control
+    - [ ] DDPG, TD3
+    - [ ] SAC
+- [ ] Ch. 7: Model-based
+    - [ ] MCTS, AlphaZero, MuZero
+    - [ ] LQR
+- [ ] Ch. 8: Next Stage
