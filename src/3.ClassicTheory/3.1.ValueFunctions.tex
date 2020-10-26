@@ -28,7 +28,9 @@ $$\E_{\Traj \mid s_t = s} R(\Traj_{t:}) = \{ \text{утв. \ref{pr:futurepastind
 
 \begin{definition}
 Для траектории $\Traj$ величина
-$$R_t \coloneqq R \left( \Traj_{t:} \right) = \sum_{t' \ge t} \gamma^{t' - t} r_{t'}$$
+\begin{equation}\label{rewardtogo}
+R_t \coloneqq R \left( \Traj_{t:} \right) = \sum_{t' \ge t} \gamma^{t' - t} r_{t'}
+\end{equation}
 называется \emph{\ENGLISH{reward-to-go}} с момента времени $t$.
 \end{definition}
 
