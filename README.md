@@ -14,7 +14,7 @@
     - [x] Double DQN, Dueling DQN, PER, Noisy DQN, Multi-step DQN
     - [x] c51, QR-DQN, IQN, Rainbow DQN
 - [ ] Ch. 5: Policy Gradient
-    - [ ] REINFORCE, A2C
+    - [x] REINFORCE, A2C
     - [ ] TRPO, PPO
 - [ ] Ch. 6: Continuous Control
     - [ ] DDPG, TD3
