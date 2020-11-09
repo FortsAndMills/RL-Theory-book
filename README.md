@@ -9,13 +9,14 @@
     - [x] RPI, policy improv. theorem
     - [x] Value Iteration, Policy Iteration
     - [x] Temporal Difference, Q-learning, SARSA
+    - [x] Eligibility Traces, TD-lambda
 - [x] Ch. 4: Value-based
     - [x] DQN
     - [x] Double DQN, Dueling DQN, PER, Noisy DQN, Multi-step DQN
     - [x] c51, QR-DQN, IQN, Rainbow DQN
 - [ ] Ch. 5: Policy Gradient
-    - [x] REINFORCE, A2C
-    - [ ] TRPO, PPO
+    - [x] REINFORCE, A2C, GAE
+    - [x] TRPO, PPO
 - [ ] Ch. 6: Continuous Control
     - [ ] DDPG, TD3
     - [ ] SAC
