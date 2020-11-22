@@ -265,7 +265,9 @@ $$
 
 \begin{definition}
 \emph{Больцмановской} с температурой $\tau$ называется стратегия
-$$\pi(a \mid s) = \softmax \left( \frac{Q^*(s, a)}{\tau} \right)$$
+\begin{equation}\label{boltzman}
+\pi(a \mid s) = \softmax \left( \frac{Q^*(s, a)}{\tau} \right)
+\end{equation}
 \end{definition}
 
 Для Больцмановской стратегии мы увидим интересную интерпретацию в контексте обсуждения Maximum Entropy RL (раздел \ref{SACsection}).
@@ -327,7 +329,7 @@ $$\hat{p}(s' \mid s, a) \coloneqq \frac{N(s, a, s')}{N(s, a)},$$
 \end{enumerate}
 \end{algorithm}
 
-\subsection{SARSA}
+\subsection{SARSA}\label{subsec:sarsa}
 
 Мы придумали off-policy алгоритм: мы умеем оценивать нашу текущую стратегию ($\argmax\limits_a Q(s, a)$, неявно сидящий внутри формулы обновления), используя сэмплы другой стратегии. Иными словами, у нас в алгоритме различаются понятия \emph{целевой политики} (target policy) --- стратегии, которую алгоритм выдаст по итогам обучения, она же оцениваемая политика, то есть та политика, для которой мы хотим посчитать оценочную функцию --- и \emph{политики взаимодействия} (behavior policy) --- стратегии взаимодействия со средой, стратегии с подмешанным эксплорейшном. Это различие было для нас принципиально: оптимальны детерминированные стратегии, а взаимодействовать со средой мы готовы лишь стохастичными стратегиями. У этого <<несовпадения>> есть следующий эффект.
 
@@ -358,8 +360,7 @@ Q(s, a) \leftarrow Q(s, a) + \alpha \left( r(s, a) + \gamma Q(s', a') - Q(s, a) 
 
 \vspace{0.3cm}
 Инициализируем $Q(s, a)$ произвольно для всех $s \in \St, a \in \A$ \\
-Наблюдаем $s_0$ \\ 
-$a_0 \sim \Uniform(\A)$. \\
+Наблюдаем $s_0$, сэмплируем $a_0 \sim \Uniform(\A)$ \\
 \textbf{На $k$-ом шаге:}
 \begin{enumerate}
     \item наблюдаем $r_k, s_{k+1}$
@@ -385,7 +386,7 @@ V^{\pi_1}(s) &= \{ \text{уравнение VQ \eqref{VQ} } \} = \sum_a \pi_1(a 
 &\le (1 - \eps) \max_a Q^{\pi_1}(s, a) \sum_a \frac{\pi_1(a \mid s) - \frac{\eps}{|\A|}}{1 - \eps} + \frac{\eps}{|\A|} \sum_a Q^{\pi_1}(s, a) = (*)
 \end{align*}
 Заметим, что последний переход был возможен только потому, что $\pi_1(a \mid s) - \frac{\eps}{|\A|} \HM> 0$ по условию, так как $\pi_1$ --- $\eps$-мягкая по условию. Осталось заметить, что 
-$$\sum_a \frac{\pi_1(a \mid s) - \frac{\eps}{|\A|}}{1 - \eps} = \frac{\sum_a \pi_1(a \mid s) - \frac{\eps}{|\A|}}{1 - \eps} = 1,$$
+$$\sum_a \frac{\pi_1(a \mid s) - \frac{\eps}{|\A|}}{1 - \eps} = \frac{\sum\limits_a \pi_1(a \mid s) - \eps}{1 - \eps} = 1,$$
 и мы показали, что $V^{\pi_1}(s) \le \E_{\pi_2(a \mid s)}Q^{\pi_1}(s, a)$.
 \end{proof}
 \end{proposition}

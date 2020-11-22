@@ -32,9 +32,11 @@
 
 В \underline{\textbf{главе 5}} метод пробрасывания градиентов через стохастические узлы вычислительного графа REINFORCE и его применение к задаче RL были придуманы в \cite{williams1992simple}. Actor-Critic методы, в которых учится как стратегия, так и оценочная функция, позволяющая обучаться с неполных эпизодов, предложены в \cite{sutton2000policy}. Применение Policy Gradient подхода с нейросетевой аппроксимацией и алгоритм A2C предложен в \cite{mnih2016asynchronous}. Список разных вариаций Policy Gradient алгоритмов можно найти в \href{https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html}{блоге Lil'log} \cite{weng2018PG}. TRPO был предложен в \cite{schulman2015trust}; обучение с длинных роллаутов привело к использованию GAE оценок, что было предложено в \cite{schulman2015high}. Алгоритм PPO описан в \cite{schulman2017proximal}, однако стандартные реализации, добившиеся высоких результатов на бенчмарках и способствовавшие распространению алгоритма, использовали дополнительные инженерные эвристики; на их существенное влияние на результаты обращено внимание в \cite{engstrom2019implementation}.
 
+Применение идей policy gradient и value-based подхода для обучения нейросетей в задаче непрерывного управления, описанное в \underline{\textbf{главе 6}}, предложено в \cite{lillicrap2015continuous} в алгоритме DDPG. Более стабильная версия этого алгоритма TD3 описана в \cite{fujimoto2018addressing}. Алгоритм Soft Q-learning, использующий теорию Maximum Entropy RL для обучения нейросетей, описан в \cite{haarnoja2017reinforcement}; алгоритм Soft Actor-Critic, ставший практическим алгоритмом для работы с непрерывными действиями в рамках этого сеттинга, предложен в \cite{haarnoja2018soft}. 
+
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.15\textwidth}
-\vspace{-0.5cm}
+\vspace{-0.25cm}
 \centering
 \includegraphics[width=0.15\textwidth]{Images/Scrat.png}
 \vspace{-0.5cm}

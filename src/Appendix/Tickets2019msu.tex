@@ -1,0 +1,68 @@
+\begin{center}
+\textcolor{ChadBlue}{\underline{\textbf{Теормин}}}   
+\end{center}
+
+\begin{enumerate}
+\item Постановка задачи обучения с подкреплением в виде марковского процесса принятия решений.
+Примеры прикладных задач. (\textit{роботы, системы управления, дота})
+\item Дилемма exploration vs. exploitation. Подходы к её решению. (\textit{можно на примере бандитов: иногда нужно пробовать другие игровые автоматы (бандиты во многом придуманы для изучения дилеммы). Подходы к решению: $\eps$-жадная, больцмановская, добавление энтропийного слагаемого (в частности, переход к Maximum Entropy RL постановке), ещё годится Upper Confidence Bound слагаемое})
+\item Понятие on-policy и off-policy алгоритмов обучения с подкреплением. Примеры. (\textit{см. ниже})
+\item Уравнения Беллмана для функций ценности. Связь функций ценности между собой. (\textit{их много: QQ, QV, VQ, VV, Q*Q*, Q*V*, V*Q*, V*V*})
+\item Понятия soft Q-функции и V-функции. Уравнения Беллмана для них. Оптимальная политика
+для них. (\textit{см. подсекцию \ref{maximumentropyrlsubsection}. Оптимальная политика $\pi(a \mid s) \propto \exp Q^*_{\soft}(s, a)$})
+\item Схема метода Q-обучения и DQN.
+\item Схема метода A2C. (\textit{в пдфке в схеме используются каноничная многошаговая оценка максимальной длины, но для простоты мы в алгоритме делали одношаговую оценку Advantage: $A^\pi(s, a) \approx r(s, a) + V^{\pi}(s') - V^{\pi}(s)$})
+\end{enumerate}
+
+\begin{center}
+\textcolor{ChadBlue}{\underline{\textbf{on-policy vs off-policy}}}   
+\end{center}
+
+[Моё понимание] Понятия вводятся для понимания того, когда можно в алгоритм вставить реплей буфер. То есть off-policy алгоритм может переиспользовать \textit{все} (читать: любые) свои предыдущие сэмплы из опыта взаимодействия.
+
+\vspace{0.2cm}
+\begin{center}
+\begin{tabular}{cm{6cm}m{4cm}cm{2cm}}
+\toprule
+    \textbf{Алгоритм} & \textbf{Предобучение на буфере эксперта $\pi^{\operatorname{expert}}$} & \textbf{Можно ли использовать реплей буфер?} & \textbf{Вердикт} & \textbf{[ответ из таблички с лекции]}  \\
+\midrule
+    CEM & Выбираем лучшие траектории и учимся воспроизводить действия из них. Получим стратегию потенциально даже чуть лучше экспертной, но не оптимальной & Нельзя (хотя можно оставлять недавние / лучшие траектории в популяции) & on-policy & off-policy (?) \\
+    \hdashline
+    Q-learning & Потенциально сходимся к $Q^*$ & Можно & off-policy & off-policy \\
+    SARSA & Сходимся к $Q^{\operatorname{expert}}$ & Нельзя & on-policy & on-policy \\
+    Expected-SARSA & Потенциально сходимся к $Q^*$ в семействе $\eps$-аугментированных стратегий, если берём из буфера четвёрки $s, a, r, s'$, и обязательно генерируем $a'$ только онлайн & Можно & off-policy & on-policy (?) \\
+    \hdashline
+    DQN & Потенциально сходимся к $Q^*$ & Можно & off-policy & off-policy \\
+    DDPG & Потенциально сходимся к $Q^*$ & Можно & off-policy & off-policy \\
+    SAC & Потенциально сходимся к $Q^*_{\soft}$ & Можно & off-policy & off-policy \\
+    \hdashline
+    REINFORCE, A2C & теоретически можно предобучать $\pi$ при помощи imitation learning, потенциально получив $\pi^{\operatorname{expert}}$ & Нельзя & on-policy & on-policy \\
+    TRPO, PPO & теоретически можно предобучать $\pi$ при помощи imitation learning, потенциально получив $\pi^{\operatorname{expert}}$ & Нельзя (переиспользование сэмплов раза три --- это не реплей буфер) & on-policy & on-policy \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.2cm}
+
+Чтобы точно не ошибиться, можно приводить как пример off-policy алгоритма Q-learning и DQN, как пример on-policy алгоритма --- Policy Gradient, где мы считаем градиент в точке текущей стратегии и для этого нам нужны сэмплы из траекторий текущей стратегии.
+
+\vspace{0.3cm}
+\textbf{Ограничения алгоритмов:} Q-learning, SARSA, Expected-SARSA --- табличные алгоритмы (таблицу размера $|\St| \times |\A|$ нужно уметь хранить в памяти), DQN --- только дискретное пространство действий, DDPG и SAC --- только непрерывное пространство действий.
+
+\newpage
+\begin{center}
+\textcolor{ChadBlue}{\underline{\textbf{Билеты}}}   
+\end{center}
+
+\begin{enumerate}
+\item \textbf{Кросс-энтропийный метод в общем виде. Его применение для решения задач оптимизации и
+задач обучения с подкреплением.} (глава \ref{metaheuristicchapter})
+\item \textbf{Уравнения Беллмана для функций ценности.} (секция \ref{valuefunctionssection} (на утверждениях про нестационарные функции ценности не останавливались), можно доказывать альтернативно через RPI (секция \ref{RPIsection})). \textbf{Алгоритмы Policy/Value Iteration.} (секция \ref{valueiterationsection})
+\item \textbf{Методы Sarsa, Q-обучение, Expected Sarsa} (секция \ref{tabularrlsection}). \textbf{Модель DQN} (глава \ref{valuebasedchapter}).
+\item \textbf{Основная теорема Policy gradient} (секция \ref{PGTsection} (теорему \ref{decoupling_stoch} использовали без доказательства, основную теорему можно доказывать любым из двух способов)). \textbf{Алгоритмы Reinforce, A2C} (секция \ref{ActorCriticSection}), \textbf{DDPG} (секция \ref{DDPGsection} (выводили из policy gradient без разбора доказательства, про шум Ухленбека игнорить)).
+\item \textbf{Метод TRPO, его теоретическое обоснование. Метод PPO}. (сначала вывести RPI (теорема \ref{RPI}), затем секция \ref{TRPOPPOsection})
+\item \textbf{Обучение с подкреплением с добавлением энтропии. Метод Soft Actor-Critic.} (секция \ref{SACsection})
+\item \textbf{Многорукие бандиты. Схемы эпсилон-жадного агента и UCB. Подход Thompson sampling.} (секция \ref{bandistssection})
+\item \textbf{Monte Carlo Tree Search в общем виде, его применение для игр Atari. Метод AlphaZero.} (секция \ref{mctssection}, \textcolor{ChadRed}{DANGER}: найти альтернативные источники)
+\item \textbf{Линейно-квадратичный регулятор и его итеративная версия. Его применение для обучения с
+подкреплением.} (секция \ref{lqrsection})
+\end{enumerate}
