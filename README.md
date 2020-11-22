@@ -17,9 +17,9 @@
 - [x] Ch. 5: Policy Gradient
     - [x] REINFORCE, A2C, GAE
     - [x] TRPO, PPO
-- [ ] Ch. 6: Continuous Control
-    - [ ] DDPG, TD3
-    - [ ] SAC
+- [x] Ch. 6: Continuous Control
+    - [x] DDPG, TD3
+    - [x] SAC
 - [ ] Ch. 7: Model-based
     - [ ] MCTS, AlphaZero, MuZero
     - [ ] LQR
