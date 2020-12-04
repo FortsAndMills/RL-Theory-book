@@ -25,9 +25,9 @@
     - [x] MCTS, AlphaZero, MuZero
     - [x] LQR
 - [ ] Ch. 8: Next Stage
-    - [] Imitation Learning / Inverse Reinforcement Learning
-    - [] Multi-Task and Hindsight
-    - [] Hierarchical RL
-    - [] Intrinsic Motivation
-    - [] Partial observability
-    - [] Multi-Agent RL
+    - [ ] Imitation Learning / Inverse Reinforcement Learning
+    - [ ] Multi-Task and Hindsight
+    - [ ] Hierarchical RL
+    - [ ] Intrinsic Motivation
+    - [ ] Partial observability
+    - [ ] Multi-Agent RL
