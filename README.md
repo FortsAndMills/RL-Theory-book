@@ -20,7 +20,14 @@
 - [x] Ch. 6: Continuous Control
     - [x] DDPG, TD3
     - [x] SAC
-- [ ] Ch. 7: Model-based
-    - [ ] MCTS, AlphaZero, MuZero
-    - [ ] LQR
+- [x] Ch. 7: Model-based
+    - [x] Bandits
+    - [x] MCTS, AlphaZero, MuZero
+    - [x] LQR
 - [ ] Ch. 8: Next Stage
+    - [] Imitation Learning / Inverse Reinforcement Learning
+    - [] Multi-Task and Hindsight
+    - [] Hierarchical RL
+    - [] Intrinsic Motivation
+    - [] Partial observability
+    - [] Multi-Agent RL
