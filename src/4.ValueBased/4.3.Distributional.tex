@@ -64,10 +64,10 @@ Q^\pi(s, a) = \E \Z^\pi(s, a)
 Посчитаем Z-функцию для MDP и стратегии $\pi$ с рисунка, $\gamma \HM= 0.8$.
 
 \begin{wrapfigure}{r}{0.45\textwidth}
-\vspace{-0.5cm}
+\vspace{-0.4cm}
 \centering
 \includegraphics[width=0.45\textwidth]{Images/Value.png}
-\vspace{-0.9cm}
+\vspace{-0.4cm}
 \end{wrapfigure}
 
 Начнём с состояния B: если агент выбирает действие \colorsquare{ChadRed}, то он получает +4, и эпизод заканчивается. Значит, $\Z^{\pi}(s \HM= B, \colorsquare{ChadRed})$ есть дельта-функция в точке 4.
@@ -158,7 +158,7 @@ $$\D^{\max}(\Z_1, \Z_2) \coloneqq \sup\limits_{s \in \St, a \in \A} \D \left( \Z
 \vspace{-0.5cm}
 \centering
 \includegraphics[width=0.3\textwidth]{Images/Wasserstein.png}
-\vspace{-5cm}
+\vspace{-5.3cm}
 \end{wrapfigure}
 
 Соответственно, вопрос о выборе метрики в пространстве Z-функций сводится к вопросу о метрике в пространстве скалярных случайных величин. Вопрос, вообще, довольно богатый. Можно пытаться посчитать расстояние между функциями распределения (такова, например, \href{https://en.wikipedia.org/wiki/Energy_distance}{метрика Крамера}), а можно --- между их обратными функциями:
@@ -290,10 +290,10 @@ $$\E \Z^\pi_k(s', a') = Q^\pi_k(s', a')$$
 Определение \eqref{optimalZ} неоднозначно.
 
 %\needspace{7\baselineskip}
-\begin{wrapfigure}{r}{0.3\textwidth}
-\vspace{-0.7cm}
+\begin{wrapfigure}{r}{0.25\textwidth}
+\vspace{-1cm}
 \centering
-\includegraphics[width=0.3\textwidth]{Images/optimalZissue.png}
+\includegraphics[width=0.25\textwidth]{Images/optimalZissue.png}
 %\vspace{-0.6cm}
 \end{wrapfigure}
 \beginproof
@@ -344,9 +344,9 @@ $$\E \Z^*_k(s', a')(s', a') = Q^*_k(s', a')$$
 Оператор $\B^*_D$ может не являться непрерывным.
 
 \begin{wrapfigure}{r}{0.3\textwidth}
-\vspace{-0.7cm}
+\vspace{-1cm}
 \centering
-\includegraphics[width=0.3\textwidth]{Images/distributionalVIissue.png}
+\includegraphics[width=0.28\textwidth]{Images/distributionalVIissue.png}
 \vspace{0.2cm}
 \end{wrapfigure}
 \beginproof
@@ -526,15 +526,15 @@ $$\nabla_\theta \E_{s'} \W_p \left( y(\T) \parallel \Z_{\theta} \right) = \frac{
 \end{align*}
 \end{theorem}
 
-Итак, градиент KL-дивергенции --- мат.ожидание по целевому распределению, и значит, мы можем вместо мат.ожидания по $\Pi \B^*_D \Z^*(s, a, \theta^-)$ использовать Монте-Карло оценку по сэмплам. При этом поскольку у нас есть даже не просто сэмплы, а целая компонента $\Pi y(\T)$ целевого распределения, то по ней интеграл мы можем взять просто целиком (он состоит всего из $A$ слагаемых, как видно, поскольку $\Pi y(\T) \in \mathcal{C}$).
-
-\needspace{7\baselineskip}
+\needspace{14\baselineskip}
 \begin{wrapfigure}{r}{0.4\textwidth}
 %\vspace{-0.3cm}
 \centering
 \includegraphics[width=0.4\textwidth]{Images/KLgeometry.png}
 \vspace{-0.8cm}
 \end{wrapfigure}
+
+Итак, градиент KL-дивергенции --- мат.ожидание по целевому распределению, и значит, мы можем вместо мат.ожидания по $\Pi \B^*_D \Z^*(s, a, \theta^-)$ использовать Монте-Карло оценку по сэмплам. При этом поскольку у нас есть даже не просто сэмплы, а целая компонента $\Pi y(\T)$ целевого распределения, то по ней интеграл мы можем взять просто целиком (он состоит всего из $A$ слагаемых, как видно, поскольку $\Pi y(\T) \in \mathcal{C}$).
 
 Мы по сути, как видно из формулы \eqref{c51loss}, начинаем решать задачу классификации, где у нас есть для данного входа $s, a$ сразу целая компонента распределения целевой переменной. Минимизация KL-дивергенции, хоть и является стандартной функций потерь в таких ситуациях, сейчас имеет для нас побочный эффект: мы отчасти потеряли <<физический смысл>> наших <<классов>>. KL-дивергенция смотрит на каждый узел $z_i$ нашей сетки отдельно и сравнивает вероятность, которую мы выдаём сейчас, с вероятностью $z_i$ в таргете. Она не учитывает, находится ли разница в вероятностной массе на соседнем узле, например, $z_{i+1}$ (в <<соседнем>> исходе) или на противоположном конце сетки в условном $z_0$; в обоих случаях KL-дивергенция будет выдавать одно и то же значение. Адекватные метрики в пространстве распределений, например, Вассерштайн, продифференцировали бы эти случаи.
 
@@ -604,6 +604,15 @@ $$z_i = F^{-1}(\tau_i)$$
 \int_0^1 \left| F^{-1}(\omega) - U^{-1}_{z_0, z_1 \dots z_{A-1}}(\omega) \right| \diff \omega \to \min_{z_0, z_1 \dots z_{A-1}}
 \end{equation}
 где $ U^{-1}_{z_0, z_1 \dots z_{A-1}}$ --- функция распределения равномерного дискретного распределения на домене $\{z_0, z_1 \dots z_{A-1}\}$. Чему она равна? Ну, понятно, что это такая <<лесенка>>:
+
+\needspace{14\baselineskip}
+\begin{wrapfigure}{r}{0.4\textwidth}
+\vspace{-0.4cm}
+\centering
+\includegraphics[width=0.4\textwidth]{Images/quantileprojection.png}
+\vspace{-1.8cm}
+\end{wrapfigure}
+
 $$U^{-1}_{z_0, z_1 \dots z_{A-1}}(\omega) = \begin{cases}
 z_0 \quad &0 \le \omega < \frac{1}{A} \\
 z_1 \quad &\frac{1}{A} \le \omega < \frac{2}{A} \\
@@ -611,13 +620,6 @@ z_1 \quad &\frac{1}{A} \le \omega < \frac{2}{A} \\
 z_{A - 1} \quad &\frac{A - 1}{A} \le \omega < 1
 \end{cases}$$
 
-\needspace{7\baselineskip}
-\begin{wrapfigure}{r}{0.45\textwidth}
-\vspace{-0.5cm}
-\centering
-\includegraphics[width=0.45\textwidth]{Images/quantileprojection.png}
-\vspace{-0.75cm}
-\end{wrapfigure}
 Подставляем это в \eqref{Wassersteinminimization}:
 \begin{equation*}
 \sum_{i = 0}^{A - 1} \int_{\frac{i}{A}}^{\frac{i + 1}{A}} \left| F^{-1}(\omega) - z_i \right| d\omega \to \min_{z_0, z_1 \dots z_{A-1}}
@@ -656,15 +658,16 @@ z_{A - 1} \quad &\frac{A - 1}{A} \le \omega < 1
 
 \subsection{Quantile Regression DQN}\label{subsec:qrdqn}
 
-Мы получили, что нам достаточно уметь искать лишь $A$ определённых квантилей распределения $\left[ \B^*_D \Z^* \right](s, a)$ для вычисления аппроксимации правой части уравнения Беллмана. Можем ли мы это сделать, используя только сэмплы? Конечно. 
-
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.2\textwidth}
-\vspace{-0.75cm}
+\vspace{-0.5cm}
 \centering
 \includegraphics[width=0.2\textwidth]{Images/quantileloss.png}
-\vspace{-1.75cm}
+\vspace{-1.2cm}
 \end{wrapfigure}
+
+Мы получили, что нам достаточно уметь искать лишь $A$ определённых квантилей распределения $\left[ \B^*_D \Z^* \right](s, a)$ для вычисления аппроксимации правой части уравнения Беллмана. Можем ли мы это сделать, используя только сэмплы? Конечно. 
+
 \emph{Квантильная регрессия} (\ENGLISH{quantile regression}) --- способ получить $\tau$-ый квантиль некоторого распределения, из которого доступна только лишь выборка. В частном случае, мы получим известный факт о том, что для получения медианы ($\frac{1}{2}$-го квантиля) нужно минимизировать MAE между константным прогнозом и сэмплами из распределения.
 
 \begin{definition}

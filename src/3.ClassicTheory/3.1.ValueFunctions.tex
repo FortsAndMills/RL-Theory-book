@@ -102,11 +102,11 @@ $V^\pi(s)$ ограничено.
 \begin{exampleBox}[label=ex:vfunction]{}
 Посчитаем V-функцию для MDP и стратегии $\pi$ с рисунка, $\gamma \HM= 0.8$. Её часто удобно считать <<с конца>>, начиная с состояний, близких к терминальным, и замечая связи между значениями функции для разных состояний.
 
-\begin{wrapfigure}{r}{0.45\textwidth}
-\vspace{-0.5cm}
+\begin{wrapfigure}{r}{0.4\textwidth}
+\vspace{-0.7cm}
 \centering
-\includegraphics[width=0.45\textwidth]{Images/Value.png}
-\vspace{-0.9cm}
+\includegraphics[width=0.4\textwidth]{Images/Value.png}
+\vspace{-1.5cm}
 \end{wrapfigure}
 
 Начнём с состояния C: там агент всегда выбирает действие \colorsquare{ChadRed}, получает -1, и эпизод заканчивается: $V^{\pi}(s \HM= C) \HM= -1$.
@@ -132,6 +132,7 @@ $$V^{\pi}(s = A) = \underbrace{0.25}_{\text{\colorsquare{ChadBlue}}} \cdot \left
 V^\pi(s) = \E_{a} \left[ r(s, a) + \gamma \E_{s'} V^\pi(s') \right]
 \end{equation}
 
+\needspace{10\baselineskip}
 \begin{wrapfigure}{r}{0.4\textwidth}
 \vspace{-0.5cm}
 \centering
@@ -195,6 +196,7 @@ V^{\pi}(C) &= -1
 \needspace{10\baselineskip}
 \begin{wrapfigure}{r}{0.3\textwidth}
 \centering
+\vspace{-0.6cm}
 \includegraphics[width=0.3\textwidth]{Images/OptDefEq.png}
 \end{wrapfigure}
 \beginproof{}
@@ -214,10 +216,10 @@ V^*(s) = \max_\pi V^{\pi}(s)
 \begin{example}
 Рассмотрим MDP из примера \ref{ex:score}; $\gamma \HM= \frac{10}{11}$, множество стратегий параметризуется единственным числом $\theta \HM\coloneqq \pi(a \HM= \text{\colorsquare{ChadRed}} \HM\mid s \HM= A)$.
 
-\begin{wrapfigure}{r}{0.3\textwidth}
+\begin{wrapfigure}{r}{0.25\textwidth}
 \centering
 \vspace{-0.8cm}
-\includegraphics[width=0.3\textwidth]{Images/Score.png}
+\includegraphics[width=0.25\textwidth]{Images/Score.png}
 \vspace{-1cm}
 \end{wrapfigure}
 
@@ -264,6 +266,7 @@ V-функции и Q-функции взаимозависимы, а именн
 \begin{example}
 Q-функция получает на вход пару состояние-действие и ничего не говорится о том, что это действие должно быть как-то связано с оцениваемой стратегией $\pi$. 
 
+\needspace{10\baselineskip}
 \begin{wrapfigure}{r}{0.35\textwidth}
 \vspace{-0.2cm}
 \centering
@@ -318,6 +321,7 @@ V^*(s) =
 \end{align*}
 \end{proposition}
 
+\needspace{8\baselineskip}
 \begin{wrapfigure}{r}{0.25\textwidth}
 \vspace{-0.3cm}
 \centering

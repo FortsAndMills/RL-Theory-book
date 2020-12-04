@@ -122,8 +122,8 @@ $$\Psi_{(N + 1)}(s, a) = \Psi_{(N)}(s, a) + \gamma^N \Psi_{(1)}(s^{(N)}, a^{(N)}
 \end{theorem}
 
 \needspace{7\baselineskip}
-\begin{wrapfigure}{l}{0.35\textwidth}
-\vspace{-0.3cm}
+\begin{wrapfigure}[10]{l}{0.35\textwidth}
+%\vspace{-0.3cm}
 \centering
 \includegraphics[width=0.35\textwidth]{Images/backward_view.png}
 %\vspace{-0.3cm}
@@ -145,10 +145,10 @@ $$e_t(s, a) \coloneqq \begin{cases}
 \end{definition}
 
 \needspace{7\baselineskip}
-\begin{wrapfigure}{r}{0.35\textwidth}
+\begin{wrapfigure}{r}{0.3\textwidth}
 \vspace{-0.8cm}
 \centering
-\includegraphics[width=0.3\textwidth]{Images/EligibilityTrace.png}
+\includegraphics[width=0.25\textwidth]{Images/EligibilityTrace.png}
 \vspace{-0.6cm}
 \end{wrapfigure}
 
@@ -165,15 +165,17 @@ $$e_t(s, a) \coloneqq \begin{cases}
 1 \quad & \text{если } s = s_t, a = a_t \\
 0 \quad & \text{иначе}
 \end{cases}$$
-Иначе говоря, для одношаговых оценок нам нужно домножать след не на $\gamma$, а на ноль. Тогда вектор $e(s, a)$ на каждой итерации будет нулевым за исключением одной лишь только что встреченной пары $s_t, a_t$, для которой он будет равен единице, и обновление \ref{eligibilitytraceupdate} будет эквивалентно обычному одношаговому temporal difference.
 
 \needspace{15\baselineskip}
 \begin{wrapfigure}{r}{0.3\textwidth}
 %\vspace{-0.5cm}
 \centering
 \includegraphics[width=0.3\textwidth]{Images/Traces.png}
-\vspace{-1.5cm}
+\vspace{-0.5cm}
 \end{wrapfigure}
+
+Иначе говоря, для одношаговых оценок нам нужно домножать след не на $\gamma$, а на ноль. Тогда вектор $e(s, a)$ на каждой итерации будет нулевым за исключением одной лишь только что встреченной пары $s_t, a_t$, для которой он будет равен единице, и обновление \ref{eligibilitytraceupdate} будет эквивалентно обычному одношаговому temporal difference.
+
 Видно, что мы теперь можем придумать другой вид <<промежуточных оценок>> между Монте-Карло и одношаговыми. Давайте как-нибудь по-другому будем след <<затухать>>. Если на очередном моменте времени след для пар $s, a$ затухает сильнее, чем в $\gamma$ раз (например, в ноль), то мы лишь будем обращать больше внимания на ту оценку, которая уже замешана в обновлении $Q(s, a)$, и меньше внимания на оценки большей длины. Классический и хорошо исследованный способ это сделать --- ввести ещё один параметр, $\lambda \in [0, 1]$ --- <<коэффициент затухания>> --- и тушить след не с коэффициентом $\gamma$, а с коэффициентом $\gamma \lambda$.
 
 Итак, мы получили алгоритм TD($\lambda$) оценивания стратегии, или temporal difference с параметром $\lambda$, который при $\lambda \HM= 1$ эквивалентен Монте-Карло алгоритму (с постоянным обновлением Q-функции <<по ходу эпизода>>), а при $\lambda \HM = 0$ эквивалентен одношаговому temporal difference методу, который мы, в частности, применяли в Q-learning и SARSA для оценивания стратегии.
@@ -223,7 +225,7 @@ $$Q(s, a) \leftarrow Q(s, a) + \alpha \sum_{t \ge 0} (\gamma \lambda)^t \Psi_{(1
 
 \needspace{5\baselineskip}
 \begin{wrapfigure}{r}{0.4\textwidth}
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 \centering
 \includegraphics[width=0.4\textwidth]{Images/td_lambda.png}
 \vspace{-0.7cm}

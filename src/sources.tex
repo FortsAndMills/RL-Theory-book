@@ -34,6 +34,10 @@
 
 Применение идей policy gradient и value-based подхода для обучения нейросетей в задаче непрерывного управления, описанное в \underline{\textbf{главе 6}}, предложено в \cite{lillicrap2015continuous} в алгоритме DDPG. Более стабильная версия этого алгоритма TD3 описана в \cite{fujimoto2018addressing}. Алгоритм Soft Q-learning, использующий теорию Maximum Entropy RL для обучения нейросетей, описан в \cite{haarnoja2017reinforcement}; алгоритм Soft Actor-Critic, ставший практическим алгоритмом для работы с непрерывными действиями в рамках этого сеттинга, предложен в \cite{haarnoja2018soft}. 
 
+За полным погружением в математику, стоящую за многорукими бандитами (\underline{\textbf{глава 7.1}}), можно обратиться к \href{https://tor-lattimore.com/downloads/book/book.pdf}{книге} \cite{lattimore2020bandit}. Нижняя оценка регрета (теорема Лаи-Роббинса) получена в \cite{lai1985asymptotically}. Асимптотическая оптимальность алгоритма UCB показана в \cite{auer2002finite}. Сама задача многоруких бандитов была впервые рассмотрена Томпсоном в \cite{thompson1933likelihood}; он же эвристически предложил сэмплирование Томпсона, которое позже тоже оказалось асимптотически оптимальным \cite{kaufmann2012thompson}.
+
+Несмотря на то, что описанный в \underline{\textbf{главе 7}} model-based подход исследовался в RL всегда, применение моделей мира и концепция сновидений популяризовалась благодаря статье \cite{ha2018world}. Победа алгоритма AlphaGo в го на основе совмещения MCTS и нейросетей в итоге была обобщена сначала в алгоритм AlphaZero \cite{silver2018general}, а затем и на случай неизвестной динамики в алгоритм $\mu$-Zero \cite{schrittwieser2019mastering}. Теория линейно-квадратичных регуляторов восходит ещё к оптимальному управлению; по LQR обычно ссылаются на \cite{bemporad2002explicit}, а по расширению iLQR --- на \cite{li2004iterative}.
+
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.15\textwidth}
 \vspace{-0.25cm}

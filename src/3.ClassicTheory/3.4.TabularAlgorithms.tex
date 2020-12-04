@@ -10,10 +10,10 @@ $$Q^{\pi}(s, a) \approx \frac{1}{N} \sum_{i=0}^N R(\Traj_i), \quad \Traj_i \sim 
 
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.35\textwidth}
-%\vspace{-0.3cm}
+\vspace{-0.3cm}
 \centering
 \includegraphics[width=0.3\textwidth]{Images/MC_backup.png}
-%\vspace{-0.3cm}
+\vspace{-0.3cm}
 \end{wrapfigure}
 Теперь, доиграв эпизод до конца, мы для каждой встретившейся пары $s, a$ в полученной траектории можем посчитать reward-to-go и использовать этот сэмпл для обновления нашей аппроксимации Q-функции --- проведения \emph{Монте-Карло бэкапа} (MC-backup). Такое обновление полностью противоположно по свойствам бэкапу динамического программирования: это <<бэкап ширины один>> бесконечной длины --- мы использовали лишь один сэмпл будущего и при этом заглянули в него на бесконечное число шагов вперёд.
 
@@ -98,6 +98,8 @@ $$\sum_{k = 0}^{n-1} \alpha_k v_k \ge \sum_{k = i}^{n-1} \alpha_k v_k \ge (b - \
 Правая часть неравенства расходится, поскольку мы просили расходимость ряда из $\alpha_k$; но ранее мы доказали сходимость левой части. Значит, предел равен нулю.
 \end{proof}
 \end{theoremBox}
+
+% TODO: tracking other than averaging
 
 \subsection{Стохастическая аппроксимация}
 
@@ -225,10 +227,10 @@ $$Q^*_{k+1}(s, a) \coloneqq Q^*_k(s, a) + \alpha_k(s, a) \left( r(s, a) + \gamma
 \begin{theorem}
 Собирая траектории при помощи жадной стратегии, есть риск не сойтись к оптимальной.
 
-\begin{wrapfigure}{r}{0.32\textwidth}
-\vspace{-0.75cm}
+\begin{wrapfigure}{r}{0.3\textwidth}
+\vspace{-0.9cm}
 \centering
-\includegraphics[width=0.28\textwidth]{Images/GreedyIsStupid.png}
+\includegraphics[width=0.25\textwidth]{Images/GreedyIsStupid.png}
 \vspace{-0.5cm}
 \end{wrapfigure}
 \beginproof
@@ -256,11 +258,12 @@ $$Q^*_{k+1}(s, a) \coloneqq Q^*_k(s, a) + \alpha_k(s, a) \left( r(s, a) + \gamma
 
 \begin{definition}
 \emph{$\eps$-жадной} ($\eps$-greedy) называется стратегия
-$$\pi(s) = \begin{cases}
+\begin{equation}\label{egreedy}
+\pi(s) = \begin{cases}
 a \sim \Uniform(\A) & \text{с вероятностью $\eps$;} \\
 \argmax\limits_a Q^*(s, a) & \text{иначе.}
 \end{cases}
-$$
+\end{equation}
 \end{definition}
 
 \begin{definition}

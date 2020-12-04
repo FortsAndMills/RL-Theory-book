@@ -137,7 +137,7 @@ $$d_\infty(V_1, V_2) \coloneqq \max_s | V_1(s) - V_2(s) |$$
 \textbf{Выход:} $V_k(s)$
 \end{algorithm}
 
-\begin{exampleBox}[label=ex:pe, righthand ratio=0.3, sidebyside, sidebyside align=center, lower separated=false]{}
+\begin{exampleBox}[label=ex:pe, righthand ratio=0.25, sidebyside, sidebyside align=center, lower separated=false]{}
 Проведём оценивание стратегии, случайно выбирающей, в какую сторону ей пойти, с $\gamma = 0.9$. Угловые клетки с ненулевой наградой терминальны; агент остаётся в той же клетке, если упирается в стенку. На каждой итерации отображается значение текущего приближения $V^{\pi}(s)$.
 
 \tcblower
@@ -257,7 +257,7 @@ $$d_\infty(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) - Q_2(s, a) |$$
 
 Итак, мы придумали наш первый табличный алгоритм планирования --- алгоритм, решающий задачу RL в условиях известной модели среды. На каждом шаге мы обновляем (<<бэкапим>>) нашу текущую аппроксимацию V-функции на её \emph{одношаговое приближение} (one-step approximation): смотрим на один шаг в будущее ($r, a, s'$) и приближаем всё остальное будущее текущей же аппроксимацией. Такой <<бэкап динамического программирования>> (dynamic programming backup, DP-backup) --- обновление <<бесконечной ширины>>: мы должны перебрать все возможные варианты следующего одного шага, рассмотреть все свои действия (по ним мы возьмём максимум) и перебрать всевозможные ответы среды --- $s'$ (по ним мы должны рассчитать мат.ожидание). Поэтому этот алгоритм в чистом виде напоминает то, что обычно и понимается под словами <<динамическое программирование>>: мы <<раскрываем дерево игры>> полностью на один шаг вперёд.
 
-\begin{exampleBox}[righthand ratio=0.3, sidebyside, sidebyside align=center, lower separated=false]{}
+\begin{exampleBox}[righthand ratio=0.25, sidebyside, sidebyside align=center, lower separated=false]{}
 Решим задачу из примера \ref{ex:pe}, $\gamma = 0.9$; на каждой итерации отображается значение текущего приближения $V^{*}(s)$. В конце концов в силу детермнированности среды станет понятно, что можно избежать попадания в терминальное -1 и кратчайшим путём добираться до терминального +1.
 
 \tcblower
@@ -290,10 +290,10 @@ $$d_\infty(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) - Q_2(s, a) |$$
 
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.35\textwidth}
-\vspace{-1cm}
+\vspace{-1.3cm}
 \centering
-\includegraphics[width=0.3\textwidth]{Images/PI_basic.png}
-\vspace{-1cm}
+\includegraphics[width=0.35\textwidth]{Images/PI_basic.png}
+\vspace{-1.3cm}
 \end{wrapfigure}
 
 Мы сейчас в некотором смысле <<обобщим>> Value Iteration и придумаем более общую схему алгоритма планирования для табличного случая.
@@ -346,10 +346,10 @@ $$\pi_k \succ \pi_{k-1} \succ \dots \succ \pi_0$$
 
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.35\textwidth}
-\vspace{-1.2cm}
+\vspace{-1.3cm}
 \centering
 \includegraphics[width=0.3\textwidth]{Images/VI_basic.png}
-\vspace{-1cm}
+\vspace{-1.3cm}
 \end{wrapfigure}
 
 Но рассмотрим такую, пока что, эвристику: давайте останавливать Policy Evaluation после ровно $N$ шагов, а после обновления стратегии не начинать оценивать $\pi_{k+1}$ с нуля, а использовать $V^{\pi_{k}}$ в качестве инициализации. Мы формально потеряем гарантии улучшения стратегии на этапе Policy Improvement, поэтому останавливать алгоритм после того, как стратегия не изменилась, уже нельзя: возможно, после следующих $N$ шагов обновления оценочной функции, аргмакс поменяется. Тогда наш алгоритм примет следующий вид: 

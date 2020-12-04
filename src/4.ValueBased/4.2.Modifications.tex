@@ -58,18 +58,19 @@ $$y(\T ) \coloneqq r + \gamma Q^*(s', \argmax\limits_{a'} Q^*(s', a', \theta), \
 
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.4\textwidth}
-\vspace{-0.3cm}
+\vspace{-0.5cm}
 \centering
 \includegraphics[width=0.4\textwidth]{Images/DuelingDQN.png}
-\vspace{-0.3cm}
+\vspace{-0.5cm}
 \end{wrapfigure}
 
-Формализуя идею, мы хотели бы в модели учить не $Q^*(s, a)$ напрямую, а получать их с учётом $V^*(s)$. Иными словами, модель должна знать ценность самих состояний и с её учётом выдавать ценности действий. \emph{Дуэльная} (\ENGLISH{dueling}) архитектура --- это модификация вычислительного графа нашей модели с параметрами $\theta$, в которой на выходе предлагается иметь две головы, V-функцию $V^*$ и Advantage-функцию $A^*$: 
+Формализуя идею, мы хотели бы в модели учить не $Q^*(s, a)$ напрямую, а получать их с учётом $V^*(s)$. Иными словами, модель должна знать ценность самих состояний и с её учётом выдавать ценности действий. \emph{Дуэльная} (dueling) архитектура --- это модификация вычислительного графа нашей модели с параметрами $\theta$, в которой на выходе предлагается иметь две головы, V-функцию $V^*$ и Advantage-функцию $A^*$: 
 \begin{equation}\label{naivedueling}
 Q^*(s, a, \theta) \coloneqq V^*(s, \theta) + A^*(s, a, \theta)
 \end{equation}
 
-Здесь есть проблема: если $V^*(s, \theta)$ --- это произвольный скаляр, то $A^*(s, a, \theta)$ --- не произвольный. \ENGLISH{Advantage}-функция не является произвольной функцией и обязана подчиняться \eqref{pr:advantageiszero}. Для оптимальных стратегий в предположении жадности нашей стратегии это утверждение вырождается в следующее свойство:
+Здесь есть проблема: если $V^*(s, \theta)$ --- это произвольный скаляр, то $A^*(s, a, \theta)$ --- не произвольный. Advantage-функция не является произвольной функцией и обязана подчиняться \eqref{pr:advantageiszero}. Для оптимальных стратегий в предположении жадности нашей стратегии это утверждение вырождается в следующее свойство:
+
 \begin{proposition}
 $$\forall s \colon \max_a A^*(s, a) = 0$$
 \beginproof
@@ -77,6 +78,7 @@ $$\forall s \colon \max_a A^*(s, a) = 0$$
     \max_a A^*(s, a) = \max_a Q^*(s, a) - V^*(s) = \{ \text{V*Q* \eqref{V*Q*}} \} = 0 \tagqed
 \end{align*}
 \end{proposition}
+
 Это условие можно легко учесть, вычтя максимум в формуле \eqref{naivedueling}:
 \begin{equation}\label{dueling}
 Q^*(s, a, \theta) = V^*(s, \theta) + A^*(s, a, \theta) - \max_{\hat{a}} A^*(s, \hat{a}, \theta)    
@@ -149,6 +151,8 @@ $$y(\T) \coloneqq \E_\eps \left[ r + \gamma \max_{a'} Q^*(s', a', \theta, \eps) 
 Опять же, мат.ожидание несмещённо оценивается по Монте-Карло, однако с целью декорреляции полезно использовать в качестве $\eps$ другие сэмплы, нежели используемые при вычислении лосса.
 
 \subsection{Приоритизированный реплей (Prioritized DQN)}\label{subsec:prioritizedreplay}
+
+%TODO: взгляд через importance sampling приоритета на градиент Q-шки
 
 \needspace{7\baselineskip}
 \begin{wrapfigure}{r}{0.3\textwidth}

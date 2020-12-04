@@ -541,25 +541,111 @@
   year={2018}
 }
 
-% MODEL BASED-------------------------------------------------------------------------------------------
+% BANDITS-------------------------------------------------------------------------------------------
 
-% MAB
-@article{gittins1979bandit,
-  title={Bandit processes and dynamic allocation indices},
-  author={Gittins, John C},
-  journal={Journal of the Royal Statistical Society: Series B (Methodological)},
-  volume={41},
-  number={2},
-  pages={148--164},
-  year={1979},
-  publisher={Wiley Online Library}
+% MAB Book
+@book{lattimore2020bandit,
+  title={Bandit algorithms},
+  author={Lattimore, Tor and Szepesv{\'a}ri, Csaba},
+  year={2020},
+  publisher={Cambridge University Press}
+}
+
+% Lai-Robbins
+@article{lai1985asymptotically,
+  title={Asymptotically efficient adaptive allocation rules},
+  author={Lai, Tze Leung and Robbins, Herbert},
+  journal={Advances in applied mathematics},
+  volume={6},
+  number={1},
+  pages={4--22},
+  year={1985},
+  publisher={Academic Press}
 }
 
 % UCB
-@inproceedings{audibert2010best,
-  title={Best arm identification in multi-armed bandits},
-  author={Audibert, Jean-Yves and Bubeck, S{\'e}bastien},
-  year={2010}
+@article{auer2002finite,
+  title={Finite-time analysis of the multiarmed bandit problem},
+  author={Auer, Peter and Cesa-Bianchi, Nicolo and Fischer, Paul},
+  journal={Machine learning},
+  volume={47},
+  number={2-3},
+  pages={235--256},
+  year={2002},
+  publisher={Springer}
+}
+
+% Thompson Sampling
+@article{thompson1933likelihood,
+  title={On the likelihood that one unknown probability exceeds another in view of the evidence of two samples},
+  author={Thompson, William R},
+  journal={Biometrika},
+  volume={25},
+  number={3/4},
+  pages={285--294},
+  year={1933},
+  publisher={JSTOR}
+}
+
+% Thompson Sampling is optimal
+@inproceedings{kaufmann2012thompson,
+  title={Thompson sampling: An asymptotically optimal finite-time analysis},
+  author={Kaufmann, Emilie and Korda, Nathaniel and Munos, R{\'e}mi},
+  booktitle={International conference on algorithmic learning theory},
+  pages={199--213},
+  year={2012},
+  organization={Springer}
+}
+
+% MODEL BASED--------------------------------------------------------------------------------------------------------
+
+% World models
+@article{ha2018world,
+  title={World models},
+  author={Ha, David and Schmidhuber, J{\"u}rgen},
+  journal={arXiv preprint arXiv:1803.10122},
+  year={2018}
+}
+
+% AlphaZero
+@article{silver2018general,
+  title={A general reinforcement learning algorithm that masters chess, shogi, and Go through self-play},
+  author={Silver, David and Hubert, Thomas and Schrittwieser, Julian and Antonoglou, Ioannis and Lai, Matthew and Guez, Arthur and Lanctot, Marc and Sifre, Laurent and Kumaran, Dharshan and Graepel, Thore and others},
+  journal={Science},
+  volume={362},
+  number={6419},
+  pages={1140--1144},
+  year={2018},
+  publisher={American Association for the Advancement of Science}
+}
+
+% MuZero
+@article{schrittwieser2019mastering,
+  title={Mastering atari, go, chess and shogi by planning with a learned model},
+  author={Schrittwieser, Julian and Antonoglou, Ioannis and Hubert, Thomas and Simonyan, Karen and Sifre, Laurent and Schmitt, Simon and Guez, Arthur and Lockhart, Edward and Hassabis, Demis and Graepel, Thore and others},
+  journal={arXiv preprint arXiv:1911.08265},
+  year={2019}
+}
+
+% LQR
+@article{bemporad2002explicit,
+  title={The explicit linear quadratic regulator for constrained systems},
+  author={Bemporad, Alberto and Morari, Manfred and Dua, Vivek and Pistikopoulos, Efstratios N},
+  journal={Automatica},
+  volume={38},
+  number={1},
+  pages={3--20},
+  year={2002},
+  publisher={Elsevier}
+}
+
+%iLQR
+@inproceedings{li2004iterative,
+  title={Iterative linear quadratic regulator design for nonlinear biological movement systems.},
+  author={Li, Weiwei and Todorov, Emanuel},
+  booktitle={ICINCO (1)},
+  pages={222--229},
+  year={2004}
 }
 
 % INTRINSIC MOTIVATION-----------------------------------------------------------------------------------------------
@@ -603,14 +689,6 @@
 
 
 % NEXT STAGE: OTHER---------------------------------------------------------------------------------------------------
-
-% World Models
-@article{ha2018world,
-  title={World models},
-  author={Ha, David and Schmidhuber, J{\"u}rgen},
-  journal={arXiv preprint arXiv:1803.10122},
-  year={2018}
-}
 
 % HER
 @inproceedings{andrychowicz2017hindsight,
