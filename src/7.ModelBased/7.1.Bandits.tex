@@ -125,7 +125,7 @@ $$\E \Regret_T \ge \log T \sum_{a \ne a^*} \frac{V^* - Q(a)}{\KL(p(r \mid a) \pa
 
 Будем говорить, что алгоритм асимптотически оптимален, если он имеет логарифмическую скорость роста среднего регрета.
 
-\subsection{Upper Confidence Bound (UCB)}
+\subsection{Upper Confidence Bound (UCB)}\label{subsec:ucb}
 
 Попробуем поискать хорошую эвристику исследования среди алгоритмов следующего вида: на очередном шаге $k$ будем выбирать действие по следующей формуле:
 \begin{equation}\label{ucb_exploration}

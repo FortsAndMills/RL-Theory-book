@@ -3,7 +3,8 @@
 
 \usepackage{animate}
 \usepackage{wrapfig}
-\usepackage{import}
+%\usepackage{import}
+\usepackage{subfiles}
 
 % ТИТУЛЬНИК
 \title{
@@ -47,19 +48,19 @@ Work in Progress
 \tableofcontents*
 
 % Поехали!
-\import{1.Setup/}{1. Chapter.tex}
-\import{2.MetaHeuristics/}{2. Chapter.tex}
-\import{3.ClassicTheory/}{3. Chapter.tex}
-\import{4.ValueBased/}{4. Chapter.tex}
-\import{5.PolicyGradient/}{5. Chapter.tex}
-\import{6.ContinuousControl/}{6. Chapter.tex}
-\import{7.ModelBased/}{7. Chapter.tex}
-%\import{8.NextStage/}{8. Chapter.tex}
+\subfile{1.Setup/1. Chapter.tex}
+\subfile{2.MetaHeuristics/2. Chapter.tex}
+\subfile{3.ClassicTheory/3. Chapter.tex}
+\subfile{4.ValueBased/4. Chapter.tex}
+\subfile{5.PolicyGradient/5. Chapter.tex}
+\subfile{6.ContinuousControl/6. Chapter.tex}
+\subfile{7.ModelBased/7. Chapter.tex}
+\subfile{8.NextStage/8. Chapter.tex}
 
-% \vspace{2cm}
-% \begin{center}
-% That's all, folks!
-% \end{center}
+\vspace{2cm}
+\begin{center}
+That's all, folks!
+\end{center}
 
 \newpage
 
@@ -73,10 +74,10 @@ Work in Progress
 %END PAGE-----------------------------------------------
 \import{}{sources.tex}
 
-% \newpage
-% \thispagestyle{empty}
-% \begin{center}
-% \vspace*{12cm}
-% \includegraphics[width=10cm]{Images/reach.jpg}
-% \end{center}
+\newpage
+\thispagestyle{empty}
+\begin{center}
+\vspace*{5cm}
+\includegraphics[width=10cm]{Images/reach.jpg}
+\end{center}
 \end{document}

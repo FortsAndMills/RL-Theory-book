@@ -351,6 +351,14 @@
   year={2015}
 }
 
+% DRQN
+@article{hausknecht2015deep,
+  title={Deep recurrent q-learning for partially observable mdps},
+  author={Hausknecht, Matthew and Stone, Peter},
+  journal={arXiv preprint arXiv:1507.06527},
+  year={2015}
+}
+
 % R2D2
 @article{horgan2018distributed,
   title={Distributed prioritized experience replay},
@@ -648,7 +656,47 @@
   year={2004}
 }
 
+% INVERSE RL --------------------------------------------------------------------------------------------------------
+
+% Maximum Entropy IRL
+@inproceedings{ziebart2008maximum,
+  title={Maximum entropy inverse reinforcement learning.},
+  author={Ziebart, Brian D and Maas, Andrew L and Bagnell, J Andrew and Dey, Anind K},
+  booktitle={Aaai},
+  volume={8},
+  pages={1433--1438},
+  year={2008},
+  organization={Chicago, IL, USA}
+}
+
+% Cost-guided Learning
+@inproceedings{finn2016guided,
+  title={Guided cost learning: Deep inverse optimal control via policy optimization},
+  author={Finn, Chelsea and Levine, Sergey and Abbeel, Pieter},
+  booktitle={International conference on machine learning},
+  pages={49--58},
+  year={2016}
+}
+
+% GAIL
+@inproceedings{ho2016generative,
+  title={Generative adversarial imitation learning},
+  author={Ho, Jonathan and Ermon, Stefano},
+  booktitle={Advances in neural information processing systems},
+  pages={4565--4573},
+  year={2016}
+}
+
 % INTRINSIC MOTIVATION-----------------------------------------------------------------------------------------------
+
+% Schmidhuber in 1991
+@inproceedings{schmidhuber1991possibility,
+  title={A possibility for implementing curiosity and boredom in model-building neural controllers},
+  author={Schmidhuber, J{\"u}rgen},
+  booktitle={Proc. of the international conference on simulation of adaptive behavior: From animals to animats},
+  pages={222--227},
+  year={1991}
+}
 
 % Schmidhuber's survey
 @article{schmidhuber2010formal,
@@ -688,7 +736,15 @@
 }
 
 
-% NEXT STAGE: OTHER---------------------------------------------------------------------------------------------------
+% Multi-task RL---------------------------------------------------------------------------------------------------
+
+% Intentional-Unintentional (random relabeling)
+@article{cabi2017intentional,
+  title={The intentional unintentional agent: Learning to solve many continuous control tasks simultaneously},
+  author={Cabi, Serkan and Colmenarejo, Sergio G{\'o}mez and Hoffman, Matthew W and Denil, Misha and Wang, Ziyu and De Freitas, Nando},
+  journal={arXiv preprint arXiv:1707.03300},
+  year={2017}
+}
 
 % HER
 @inproceedings{andrychowicz2017hindsight,
@@ -699,6 +755,114 @@
   year={2017}
 }
 
+% Agent57, meta-controller
+@article{badia2020agent57,
+  title={Agent57: Outperforming the atari human benchmark},
+  author={Badia, Adri{\`a} Puigdom{\`e}nech and Piot, Bilal and Kapturowski, Steven and Sprechmann, Pablo and Vitvitskyi, Alex and Guo, Daniel and Blundell, Charles},
+  journal={arXiv preprint arXiv:2003.13350},
+  year={2020}
+}
+
+% Hindsight Relabeling: Abbeel
+@article{li2020generalized,
+  title={Generalized Hindsight for Reinforcement Learning},
+  author={Li, Alexander C and Pinto, Lerrel and Abbeel, Pieter},
+  journal={arXiv preprint arXiv:2002.11708},
+  year={2020}
+}
+
+% Hindsight Relabeling: Levine
+@article{eysenbach2020rewriting,
+  title={Rewriting History with Inverse RL: Hindsight Inference for Policy Improvement},
+  author={Eysenbach, Benjamin and Geng, Xinyang and Levine, Sergey and Salakhutdinov, Ruslan},
+  journal={arXiv preprint arXiv:2002.11089},
+  year={2020}
+}
+
+% HIERARCHICAL RL -------------------------------------------------------------------------------------
+
+% Option-Critic
+@inproceedings{bacon2017option,
+  title={The option-critic architecture},
+  author={Bacon, Pierre-Luc and Harb, Jean and Precup, Doina},
+  booktitle={Thirty-First AAAI Conference on Artificial Intelligence},
+  year={2017}
+}
+
+% FuN
+@article{vezhnevets2017feudal,
+  title={Feudal networks for hierarchical reinforcement learning},
+  author={Vezhnevets, Alexander Sasha and Osindero, Simon and Schaul, Tom and Heess, Nicolas and Jaderberg, Max and Silver, David and Kavukcuoglu, Koray},
+  journal={arXiv preprint arXiv:1703.01161},
+  year={2017}
+}
+
+% HIRO
+@inproceedings{nachum2018data,
+  title={Data-efficient hierarchical reinforcement learning},
+  author={Nachum, Ofir and Gu, Shixiang Shane and Lee, Honglak and Levine, Sergey},
+  booktitle={Advances in neural information processing systems},
+  pages={3303--3313},
+  year={2018}
+}
+
+% Memory -----------------------------------------------------------------------------------------------
+
+% PoMDP
+@article{smallwood1973optimal,
+  title={The optimal control of partially observable Markov processes over a finite horizon},
+  author={Smallwood, Richard D and Sondik, Edward J},
+  journal={Operations research},
+  volume={21},
+  number={5},
+  pages={1071--1088},
+  year={1973},
+  publisher={INFORMS}
+}
+
+% NEC
+@article{pritzel2017neural,
+  title={Neural episodic control},
+  author={Pritzel, Alexander and Uria, Benigno and Srinivasan, Sriram and Puigdomenech, Adria and Vinyals, Oriol and Hassabis, Demis and Wierstra, Daan and Blundell, Charles},
+  journal={arXiv preprint arXiv:1703.01988},
+  year={2017}
+}
+
+% Multi-Agent RL ---------------------------------------------------------------------------------------
+
+% Adversarial policies
+@article{gleave2019adversarial,
+  title={Adversarial policies: Attacking deep reinforcement learning},
+  author={Gleave, Adam and Dennis, Michael and Wild, Cody and Kant, Neel and Levine, Sergey and Russell, Stuart},
+  journal={arXiv preprint arXiv:1905.10615},
+  year={2019}
+}
+
+% QMix for cooperation
+@article{rashid2018qmix,
+  title={QMIX: Monotonic value function factorisation for deep multi-agent reinforcement learning},
+  author={Rashid, Tabish and Samvelyan, Mikayel and De Witt, Christian Schroeder and Farquhar, Gregory and Foerster, Jakob and Whiteson, Shimon},
+  journal={arXiv preprint arXiv:1803.11485},
+  year={2018}
+}
+
+% MADDPG
+@inproceedings{lowe2017multi,
+  title={Multi-agent actor-critic for mixed cooperative-competitive environments},
+  author={Lowe, Ryan and Wu, Yi I and Tamar, Aviv and Harb, Jean and Abbeel, OpenAI Pieter and Mordatch, Igor},
+  booktitle={Advances in neural information processing systems},
+  pages={6379--6390},
+  year={2017}
+}
+
+% Communication (RIAL, DIAL)
+@inproceedings{foerster2016learning,
+  title={Learning to communicate with deep multi-agent reinforcement learning},
+  author={Foerster, Jakob and Assael, Ioannis Alexandros and De Freitas, Nando and Whiteson, Shimon},
+  booktitle={Advances in neural information processing systems},
+  pages={2137--2145},
+  year={2016}
+}
 
 % ENVIRONMENTS------------------------------------------------------------------------------------------
 
