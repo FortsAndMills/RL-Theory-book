@@ -1,5 +1,7 @@
 # RL-Theory-book (rus)
 
+**Status**: main topics covered, requires revision / editing
+
 - [x] Ch. 1: Introduction
 - [x] Ch. 2: Meta-heuristics
     - [x] NEAT, WANN
@@ -24,10 +26,10 @@
     - [x] Bandits
     - [x] MCTS, AlphaZero, MuZero
     - [x] LQR
-- [ ] Ch. 8: Next Stage
-    - [ ] Imitation Learning / Inverse Reinforcement Learning
-    - [ ] Multi-Task and Hindsight
-    - [ ] Hierarchical RL
-    - [ ] Intrinsic Motivation
-    - [ ] Partial observability
-    - [ ] Multi-Agent RL
+- [x] Ch. 8: Next Stage
+    - [x] Imitation Learning / Inverse Reinforcement Learning
+    - [x] Multi-Task and Hindsight
+    - [x] Hierarchical RL
+    - [x] Intrinsic Motivation
+    - [x] Partial observability
+    - [x] Multi-Agent RL
