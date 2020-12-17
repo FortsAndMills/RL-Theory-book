@@ -4,7 +4,7 @@
 
 \begin{definition}
 Энтропией распределения $\pi(a)$ называется
-$$\mathcal{H}(\pi(a)) \coloneqq - \E_{\pi(a)} \log \pi(a)$$
+$$\entropy(\pi(a)) \coloneqq - \E_{\pi(a)} \log \pi(a)$$
 \end{definition}
 
 Поменяем постановку задачи RL. Добавим в качестве эвристики к награде энтропию нашей стратегии, а то есть:
@@ -12,7 +12,7 @@ $$\mathcal{H}(\pi(a)) \coloneqq - \E_{\pi(a)} \log \pi(a)$$
 \begin{definition}
 Задачей \emph{Maximum Entropy RL} является максимизация функционала
 \begin{equation}\label{merl}
-    J_{\soft}(\pi) \coloneqq \E_{\Traj \sim \pi} \sum_{t \ge 0} \gamma^t \left[ r_t + \alpha \mathcal{H}(\pi(\cdot \mid s)) \right] \to \max_\pi
+    J_{\soft}(\pi) \coloneqq \E_{\Traj \sim \pi} \sum_{t \ge 0} \gamma^t \left[ r_t + \alpha \entropy(\pi(\cdot \mid s)) \right] \to \max_\pi
 \end{equation}
 где $\alpha$ --- гиперпараметр, называемый \emph{температурой} (temperature).
 \end{definition}
@@ -39,16 +39,16 @@ r_{\soft}(s, a) \coloneqq r(s, a) - \alpha \log \pi(a \mid s)
 \end{equation}
 Построенную теорию теперь нужно перепроверять, поскольку награда $r$ стала зависеть от параметров стратегии напрямую, да и очевидно, что не все утверждения переносятся на новую постановку:
 
-\begin{theorem}
+\begin{proposition}
 Оптимальной детерминированной стратегии может не существовать.
 \begin{proof}
 В MDP, где награда всегда 0, оптимальна стратегия с максимальной энтропией.
 \end{proof}
-\end{theorem}
+\end{proposition}
 
 Рассмотрим только нужные нам вещи. Будем обозначать оценочные функции в рамках данного фреймворка как $Q^\pi_{\soft}, V^\pi_{\soft}$. Также без ограничения общности далее будем считать $\alpha \HM= 1$, так как всегда можно перемасштабировать награду $r(s, a)$ без изменения задачи.
 
-Мы также должны договориться о том, в какой момент во время взаимодействия приходит энтропийный бонус. Формула \eqref{softreward} предполагает, что после выбора действия $a$ из состояния $s$ помимо награды $r(s, a)$ агент ещё поощряется $\log \pi(a \mid s)$; однако мы договоримся по-другому\footnote{такая договорённость удобнее, поскольку после сэмплирования действия $a$ в состоянии $s$ неудобно учитывать зависимость награды от распределения $\pi(\cdot \HM\mid s)$}. Будем считать, что агент, приходя в некоторое состояние $s$, получает бонус в размере $\mathcal{H}(\pi(\cdot \mid s)) \HM\coloneqq - \E_{a \sim \pi(a \mid s)} \log \pi(a \mid s)$ (если состояние не терминальное), затем сэмплирует действие $a$, получает бонус $r(s, a)$ и потом наблюдает $s'$. В такой договорённости уравнения для мягких оценочных функций выглядят так:
+Мы также должны договориться о том, в какой момент во время взаимодействия приходит энтропийный бонус. Формула \eqref{softreward} предполагает, что после выбора действия $a$ из состояния $s$ помимо награды $r(s, a)$ агент ещё поощряется $\log \pi(a \mid s)$; однако мы договоримся по-другому\footnote{такая договорённость удобнее, поскольку после сэмплирования действия $a$ в состоянии $s$ неудобно учитывать зависимость награды от распределения $\pi(\cdot \HM\mid s)$.}. Будем считать, что агент, приходя в некоторое состояние $s$, получает бонус в размере $\entropy(\pi(\cdot \mid s)) \HM\coloneqq - \E_{a \sim \pi(a \mid s)} \log \pi(a \mid s)$ (если состояние не терминальное), затем сэмплирует действие $a$, получает бонус $r(s, a)$ и потом наблюдает $s'$. В такой договорённости уравнения для мягких оценочных функций выглядят так:
 
 \begin{theorem}[Мягкие уравнения Беллмана (soft Bellman equations)]
 $$Q^\pi_{\soft}(s, a) = r(s, a) + \gamma \E_{s'} V^\pi_{\soft}(s')$$
@@ -74,7 +74,7 @@ $$\E_{\pi_t(a \mid s)} \left[ Q^*_{\soft}(s, a, t) - \log \pi_t(a \mid s) \right
 $$
 
 Благодаря отказу от стационарности $Q^*_{\soft}(s, a_t, t)$ от $\pi_t$ не зависит. Чтобы решить эту задачу, заметим, что с точностью до константы, не зависящей от $\pi_t$, оптимизируемое выражение есть:
-$$-\KL \left( \pi_t(a \mid s) \parallel \frac{\exp Q^*_{\soft}(s, a, t)}{Z(s, t)} \right) \to \max\limits_{\pi_t(a \mid s)},$$
+$$-\KL \left( \pi_t(a \mid s) \parallel \frac{\exp Q^*_{\soft}(s, a, t)}{Z(s, t)} \right) \to \max\limits_{\pi_t(a \HM\mid s)},$$
 где $Z(s, t)$ --- нормировочная константа $\exp Q^*_{\soft}(s, a, t)$. Понятно, что оптимум достигается в нуле на $\pi_t(a \mid s)$, совпадающей с этим распределением.
 
 Дальнейшее рассуждение строится как раньше: $Q^*_{\soft}$ от времени не зависит по определению (аналогично утв. \ref{pr:nonstat_optimal_are_stat}), поэтому оптимальная стратегия получается стационарной, следовательно
@@ -104,7 +104,7 @@ $$-\KL \left( \pi_t(a \mid s) \parallel \frac{\exp Q^*_{\soft}(s, a, t)}{Z(s, t)
 
 Имея на руках вид оптимальной стратегии, мы можем получить уравнения оптимальности:
 
-\begin{theorem}[Мягкие уравнения оптимальности Беллмана (soft Bellman optimality equations)]
+\begin{theorem}[Мягкие уравнения связи]
 \begin{equation}\label{softV*Q*}
 V^*_{\soft}(s) = \log \int\limits_{\A} \exp Q^*_{\soft}(s, a) \diff a
 \end{equation}
@@ -126,7 +126,7 @@ V^\pi_{\soft}(s) &= \E_{\pi(a \mid s)} \left[ Q^\pi_{\soft}(s, a) - \log \pi(a \
 $$Q^*_{\soft}(s, a) = r(s, a) + \gamma \E_{s'} V^*_{\soft}(s')$$
 \end{proposition}
 
-\begin{proposition}
+\begin{proposition}[Мягкое уравнение оптимальности Беллмана (soft Bellman optimality equations)]
 \begin{equation}\label{softQ*Q*}
 Q^*_{\soft}(s, a) = r(s, a) + \gamma \E_{s'} \log \int\limits_{\A} \exp Q^*_{\soft}(s', a') \diff a'
 \end{equation}
@@ -135,7 +135,9 @@ Q^*_{\soft}(s, a) = r(s, a) + \gamma \E_{s'} \log \int\limits_{\A} \exp Q^*_{\so
 \begin{theorem}
 Оператор, стоящий в правой части уравнения \eqref{softQ*Q*}, является сжимающим с коэффициентом $\gamma$, и, следовательно, метод простой итерации решения этой системы уравнений сходится из любого начального приближения к единственной неподвижной точке.
 \begin{proof}
-Пусть даны две Q-функции, $Q_1, Q_2$, и пусть $\rho(Q_1, Q_2) \coloneqq \max_{s, a} | Q_1(s, a) \HM- Q_2(s, a) | \HM< \eps$. Тогда:
+Пусть даны две Q-функции, $Q_1, Q_2$, и пусть 
+$$\rho(Q_1, Q_2) \coloneqq \max\limits_{s, a} | Q_1(s, a) \HM- Q_2(s, a) | \HM< \eps.$$
+Тогда:
 $$
 \log \int\limits_{\A} \exp Q_1(s, a) \diff a \le \log \int\limits_{\A} \exp (Q_2(s, a) + \eps) \diff a = \eps + \log \int\limits_{\A} \exp Q_2(s, a) \diff a
 $$
@@ -168,7 +170,7 @@ $$y(\T) \coloneqq r + \gamma \log \int\limits_{\A} \exp Q^*_{\soft}(s', a', \the
 
 \begin{theoremBox}[label=th:softpi]{}
 Пусть стратегии $\textcolor{ChadBlue}{\pi_1}$ и $\textcolor{ChadPurple}{\pi_2}$ таковы, что для всех состояний $s$ выполняется:
-$$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \mathcal{H}(\textcolor{ChadPurple}{\pi_2}(\cdot \mid s)) \ge \textcolor{ChadBlue}{V^{\pi_1}_{\soft}}(s),$$
+$$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \entropy(\textcolor{ChadPurple}{\pi_2}(\cdot \mid s)) \ge \textcolor{ChadBlue}{V^{\pi_1}_{\soft}}(s),$$
 тогда $\textcolor{ChadPurple}{\pi_2} \succeq \textcolor{ChadBlue}{\pi_1}$ с учётом энтропийного бонуса; если хотя бы для одного $s$ неравенство выполнено строго, то $\textcolor{ChadPurple}{\pi_2} \succ \textcolor{ChadBlue}{\pi_1}$.
 \begin{proof}
 Полностью аналогично доказательству в обычном случае (теорема \ref{th:policyimprovement}).
@@ -184,7 +186,7 @@ $$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\
 $$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \left[ \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) - \log \textcolor{ChadPurple}{\pi_2}(a \mid s) \right] \to \max\limits_{\textcolor{ChadPurple}{\pi_2}(a \mid s)}
 $$
 Следовательно,
-$$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \mathcal{H}(\textcolor{ChadPurple}{\pi_2}(\cdot \mid s)) \ge \E_{\textcolor{ChadBlue}{\pi_1}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \mathcal{H}(\textcolor{ChadBlue}{\pi_1}(\cdot \mid s)) = \textcolor{ChadBlue}{V^{\pi_1}_{\soft}}(s),$$
+$$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \entropy(\textcolor{ChadPurple}{\pi_2}(\cdot \mid s)) \ge \E_{\textcolor{ChadBlue}{\pi_1}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \entropy(\textcolor{ChadBlue}{\pi_1}(\cdot \mid s)) = \textcolor{ChadBlue}{V^{\pi_1}_{\soft}}(s),$$
 где последнее равенство следует из мягкого VQ уравнения \eqref{softVQ}. Значит, $\textcolor{ChadPurple}{\pi_2}$ попадает под теорему \ref{th:softpi}.
 \end{proof}
 \end{theorem}
@@ -204,11 +206,12 @@ $$V_{\soft}^\pi(s) \leftarrow \E_{a} \left[ Q^\pi_{\soft}(s, a) - \log \pi(a \mi
 
 Таким образом, таргеты для критика (Q-функция с параметрами $\omega$) и для вспомогательной V-функции выглядят так: для заданного перехода $\T \HM= (s, a, r, s')$, взятого из буфера, генерируем $\hat{a}$ из текущей версии стратегии $\pi$ и запоминаем вероятность $\pi(\hat{a} \HM\mid s)$, после чего вычисляем таргеты по следующим формулам:
 $$y_Q(\T) \coloneqq r + \gamma V^\pi_{\soft}(s', \psi)$$
-$$y_V(\T) \coloneqq Q^\pi_{\soft}(s, \hat{a}, \omega) - \log \pi(a \mid s)$$
+$$y_V(\T) \coloneqq Q^\pi_{\soft}(s, \hat{a}, \omega) - \log \pi(\hat{a} \mid s)$$
 И с такими таргетами, как обычно, решаем задачу регрессии с функцией потерь MSE. Самое главное --- соответствующее действие $\hat{a}$ для таргета $y_V$ брать не из буфера, а сгенерировать из текущей версии стратегии, поскольку иначе мы сдвинемся в сторону V-функции не текущей стратегии $\pi$, а той стратегии, которая выбирала $a$ из буфера.
 
-Для стабилизации процесса предлагаются следующие эвристики\footnote{в DDPG-подобных схемах однозначный ответ, где нужно использовать таргет-сеть, а где нет, дать сложно. Понятно лишь то, что для стабилизации какие-то эвристики необходимы; без таргет-сетей эти алгоритмы не заработают. В этих моментах могут различаться и реализации алгоритмов.}: завести таргет-сеть (с параметрами $\psi^{-}$) для V-функции и использовать её при построении таргета $y_Q$ для Q-функции, а для борьбы с overestimation bias в таргете для V-функции использовать clipped double оценку (раздел \ref{subsec:clippedtwin}), то есть учить две Q-функции с параметрами $\omega_1, \omega_2$ и строить таргеты по следующим формулам: 
-$$y_Q(\T) \coloneqq r + \gamma V^\pi_{\soft}(s', \psi^{-})$$
+Для стабилизации процесса предлагаются следующие эвристики\footnote{в DDPG-подобных схемах дать однозначный ответ, где нужно использовать таргет-сеть, а где нет, сложно. Понятно лишь то, что для стабилизации какие-то эвристики необходимы; без таргет-сетей эти алгоритмы не заработают. В этих моментах могут различаться и реализации алгоритмов.}: завести таргет-сеть (с параметрами $\psi^{-}$) для V-функции и использовать её при построении таргета $y_Q$ для Q-функции:
+$$y_Q(\T) \coloneqq r + \gamma V^\pi_{\soft}(s', \psi^{-}),$$
+а для борьбы с overestimation bias в таргете для V-функции использовать clipped double оценку (раздел \ref{subsec:clippedtwin}), то есть учить две Q-функции с параметрами $\omega_1, \omega_2$ и строить таргет $y_V$ по следующей формуле: 
 $$y_V(\T) \coloneqq \min_{i = {1, 2}} Q^\pi_{\soft}(s, \hat{a}, \omega_i) - \log \pi(a \mid s)$$
 
 \subsection{Обучение мягкого актёра}
@@ -232,7 +235,7 @@ $$\KL(\pi_\theta(a \mid s) \parallel \exp Q^\pi_{\soft}(s, a)) = \E_{a \sim \pi_
 \E_{a \sim \pi_\theta(a \mid s)} \left[ -\log \pi_\theta(a \mid s) + Q^\pi_{\soft}(s, a) \right] \to \max_{\theta}
 \end{equation}
 
-Первое слагаемое --- энтропию $\pi_\theta(a \mid s)$ --- обычно можно рассчитать для выбранной параметризации $\pi_{\theta}(a \HM\mid s)$. Рассмотрим второе слагаемое (среднее Q-функции по действиям); тут возможно два случая. Допустим, стратегия выдаёт распределение, для которого работает \emph{репараметризационный трюк} (reparameterization trick): а то есть, если сэмплирование $a \HM\sim \pi_\theta(a \mid s)$ эквивалентно сэмплированию шума из некоторого не зависящего от параметров распределения $\eps \sim p(\eps)$ и его дальнешего детерминированного преобразования $a \HM= \pi_{\theta}(s, \eps)$. Тогда второе слагаемое в \eqref{stochactor} мы сможем оптимизировать по $\theta$ через этот репараметризационный трюк:
+Первое слагаемое --- энтропию $\pi_\theta(a \mid s)$ --- обычно можно рассчитать для выбранной параметризации $\pi_{\theta}(a \HM\mid s)$. Рассмотрим второе слагаемое (среднее Q-функции по действиям); тут возможно два случая. Допустим, стратегия выдаёт распределение, для которого работает \emph{репараметризационный трюк} (reparameterization trick): а то есть, если сэмплирование $a \HM\sim \pi_\theta(a \mid s)$ эквивалентно сэмплированию шума из некоторого не зависящего от параметров распределения $\eps \sim p(\eps)$ и его дальнейшего детерминированного преобразования $a \HM= \pi_{\theta}(s, \eps)$. Тогда второе слагаемое в \eqref{stochactor} мы сможем оптимизировать по $\theta$ через этот репараметризационный трюк:
 \begin{equation*}
 \E_{a \sim \pi_\theta(a \mid s)} Q^\pi_{\soft}(s, a) = \E_{\eps \sim p(\eps)} Q^\pi_{\soft}(s, \pi_{\theta}(s, \eps))
 \end{equation*}
@@ -240,7 +243,7 @@ $$\KL(\pi_\theta(a \mid s) \parallel \exp Q^\pi_{\soft}(s, a)) = \E_{a \sim \pi_
 
 \begin{exampleBox}[label=ex:gaussianactor_sac]{}
 Пусть наша стратегия параметризована нормальным распределением $\pi_\theta(a \mid s) \HM\coloneqq \N(\mu(s, \theta), \sigma(s, \theta)^2I)$. Для неё можно проводить репараметризационный трюк: сэмплирование действий эквивалентно $a \coloneqq \mu(s, \theta) \HM+ \eps \HM\odot \sigma(s, \theta)$, где $\eps \HM\sim \N(0, I)$, $\odot$ --- поэлементное перемножение. Для него также можно аналитически посчитать энтропию:
-$$\mathcal{H}(\N(\mu, \sigma^2I)) = \sum_{i=1}^{A} \log \sigma_i$$
+$$\entropy(\N(\mu, \sigma^2I)) = \sum_{i=1}^{A} \log \sigma_i$$
 
 Итого, формула \eqref{stochactor} в таком случае получается следующей:
 $$\sum_{i=1}^A\log \sigma_i(s, \theta) + \E_{\eps \sim \N(0, I)} Q^\pi_{\soft}(s, \mu(s, \theta) + \sigma(s, \theta) \eps) \to \max_\theta $$
@@ -267,7 +270,7 @@ $$\pi_\theta(a \mid s) \coloneqq \sum_{i = 1}^K w_i(s, \theta) \N(\mu_i(s, \thet
 Далее схема приведена для простоты для случая, если актёр моделирует гауссиану (см. пример \ref{ex:gaussianactor_sac}). 
 
 \begin{algorithm}[label = SACalgorithm]{Soft Actor-Critic (SAC)}
-\textbf{Гиперпараметры:} $B$ --- размер мини-батчей, $\tau$ --- параметр экспоненциального сглаживания таргет-сети, $\pi$ --- гауссова стратегия с параметрами $\theta$, $Q^\pi_{\soft}$ --- две нейросетки с параметрами $\omega_1$ и $\omega_2$, $V^\pi_{\soft}$ --- нейросетка с параметрами $\psi$, SGD-оптимизаторы.
+\textbf{Гиперпараметры:} $B$ --- размер мини-батчей, $\tau$ --- параметр экспоненциального сглаживания таргет-сети, $\pi_{\theta}(a \mid s) \coloneqq \N(\mu_{\theta}(s), \sigma_{\theta}(s)^2 I)$ --- гауссова стратегия с параметрами $\theta$, $Q^\pi_{\soft}(s, a, \omega_i)$ --- две нейросетки с параметрами $\omega_1$ и $\omega_2$, $V^\pi_{\soft}(s, \psi)$ --- нейросетка с параметрами $\psi$, SGD-оптимизаторы.
 
 \vspace{0.3cm}
 Инициализировать $\theta, \omega_1, \omega_2, \psi$ произвольно \\
@@ -283,7 +286,7 @@ $$\pi_\theta(a \mid s) \coloneqq \sum_{i = 1}^K w_i(s, \theta) \N(\mu_i(s, \thet
     \item посчитать оценку градиента по параметрам стратегии:
     $$\nabla_\theta \coloneqq \frac{1}{B}\sum_{s \in B} \nabla_\theta \left[ \sum_{i=0}^A \log \sigma_i(s, \theta) + Q^\pi_{\soft}(s, \mu(s, \theta) + \sigma(s, \theta) \eps(s), \omega_1) \right]$$
     \item делаем шаг градиентного подъёма по $\theta$, используя $\nabla_\theta$
-    \item для каждого транзишна $\T = (s, a, r, s', \done)$ засэмплировать $a' \sim \pi_\theta(a' \mid s')$ и сохранить вероятности $\pi_\theta(a' \mid s')$
+    \item для каждого перехода $\T \coloneqq (s, a, r, s', \done)$ засэмплировать $a' \sim \pi_\theta(a' \mid s')$ и сохранить вероятности $\pi_\theta(a' \mid s')$
     \item посчитать таргеты:
     $$y_V(\T ) \coloneqq \min_{i = 1, 2} Q^\pi_{\soft}\left( s', a', \omega_i \right) - \log \pi_\theta(a' \mid s')$$
     $$y_Q(\T ) \coloneqq r + \gamma V^\pi_{\soft}\left( s', \psi^{-} \right)$$
