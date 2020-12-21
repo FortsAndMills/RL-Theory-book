@@ -364,7 +364,9 @@ $$\nabla_{\theta} J(\pi) \approx \frac{1}{1 - \gamma}\E_{a \sim \pi(a \mid s)} \
 \subsection{Связь с policy improvement}
 
 Формула градиента в форме \eqref{gradient} даёт ещё одну интересную интерпретацию того, в каком направлении указывает полученная формула градиента. Давайте введём ещё одну \emph{суррогатную функцию} (surrogate objective). Как и суррогатная функция \eqref{surrogateobj}, это будет ещё один функционал, который имеет в точке текущих значений параметров стратегии $\pi$ такой же градиент, как и $J(\theta)$:
-$$\mathcal{L}_{\textcolor{ChadPurple}{\tilde{\pi}}}(\textcolor{ChadBlue}{\theta}) \coloneqq \frac{1}{1 - \gamma}\E_{\textcolor{ChadPurple}{d_{\tilde{\pi}}(s)}} \E_{a \sim \textcolor{ChadBlue}{\pi_{\theta}}(a \mid s)} Q^{\textcolor{ChadPurple}{\tilde{\pi}}}(s, a)$$
+\begin{equation}\label{PGisPI}
+\mathcal{L}_{\textcolor{ChadPurple}{\tilde{\pi}}}(\textcolor{ChadBlue}{\theta}) \coloneqq \frac{1}{1 - \gamma}\E_{\textcolor{ChadPurple}{d_{\tilde{\pi}}(s)}} \E_{a \sim \textcolor{ChadBlue}{\pi_{\theta}}(a \mid s)} Q^{\textcolor{ChadPurple}{\tilde{\pi}}}(s, a)
+\end{equation}
 
 Эта суррогатная функция, опять же, от двух стратегий: стратегии $\textcolor{ChadBlue}{\pi_{\theta}}$, которую мы оптимизируем, и ещё одной стратегии $\textcolor{ChadPurple}{\tilde{\pi}}$. Снова смотрим на эту суррогатную функцию в такой точке $\theta$, что две стратегии совпадают: $\textcolor{ChadPurple}{\tilde{\pi}} \HM\equiv \textcolor{ChadBlue}{\pi_{\theta}}$; будем <<шевелить>> $\theta$ и смотреть на градиент. То есть теперь мы <<заморозили>> распределение частот посещений состояний и, как и в прошлый раз, оценочную функцию. Тогда:
 
