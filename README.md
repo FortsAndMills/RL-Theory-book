@@ -28,8 +28,8 @@
     - [x] LQR
 - [x] Ch. 8: Next Stage
     - [x] Imitation Learning / Inverse Reinforcement Learning
+    - [x] Intrinsic Motivation
     - [x] Multi-Task and Hindsight
     - [x] Hierarchical RL
-    - [x] Intrinsic Motivation
     - [x] Partial observability
     - [x] Multi-Agent RL
