@@ -115,14 +115,14 @@ $$-\KL \left( \pi_t(a \mid s) \parallel \frac{\exp Q^*_{\soft}(s, a, t)}{Z(s, t)
 V^*_{\soft}(s) = \log \int\limits_{\A} \exp Q^*_{\soft}(s, a) \diff a
 \end{equation}
 \begin{proof}
-Мы знаем, что оптимальная стратегия имеет вид $\pi(a \mid s) \HM= \frac{\exp{Q^*_{\soft}(s, a)}}{Z(s)}$, где
+Мы знаем, что оптимальная стратегия имеет вид $\pi^*(a \mid s) \HM= \frac{\exp{Q^*_{\soft}(s, a)}}{Z(s)}$, где
 $$Z(s) \coloneqq \int\limits_{\A} \exp Q^*_{\soft}(s, a) \diff a$$
 является нормировочной константой. Посчитаем энтропию такого распределения:
-$$-\E_{\pi(a \mid s)} \log \pi(a \mid s) = \int\limits_{\A} \frac{\exp{Q^*_{\soft}(s, a)}}{Z(s)} \left(\log Z(s) - Q^*_{\soft}(s, a) \right) \diff a = \log Z(s) - \E_{\pi(a \mid s)} Q^*_{\soft}(s, a)$$
+$$-\E_{\pi^*(a \mid s)} \log \pi^*(a \mid s) = \int\limits_{\A} \frac{\exp{Q^*_{\soft}(s, a)}}{Z(s)} \left(\log Z(s) - Q^*_{\soft}(s, a) \right) \diff a = \log Z(s) - \E_{\pi^*(a \mid s)} Q^*_{\soft}(s, a)$$
 
-Подставим оптимальную стратегию в мягкое VQ уравнение \eqref{softVQ}:
+Подставим оптимальную стратегию в мягкое VQ уравнение \eqref{softVQ}, которое справедливо в том числе и для оптимальной стратегии:
 \begin{align*}
-V^\pi_{\soft}(s) &= \E_{\pi(a \mid s)} \left[ Q^\pi_{\soft}(s, a) - \log \pi(a \mid s) \right] = \\ &= \E_{\pi(a \mid s)} Q^*_{\soft}(s, a) - \E_{\pi(a \mid s)} Q^*_{\soft}(s, a) + \log Z(s) = \\ &= \log Z(s)
+V^*_{\soft}(s) &= \E_{\pi^*(a \mid s)} \left[ Q^*_{\soft}(s, a) - \log \pi^*(a \mid s) \right] = \\ &= \E_{\pi^*(a \mid s)} Q^*_{\soft}(s, a) - \E_{\pi^*(a \mid s)} Q^*_{\soft}(s, a) + \log Z(s) = \\ &= \log Z(s)
 \end{align*}
 Вспоминая определение $Z(s)$, получаем доказываемое.
 \end{proof}
@@ -142,7 +142,7 @@ Q^*_{\soft}(s, a) = r(s, a) + \gamma \E_{s'} \log \int\limits_{\A} \exp Q^*_{\so
 Оператор, стоящий в правой части уравнения \eqref{softQ*Q*}, является сжимающим с коэффициентом $\gamma$, и, следовательно, метод простой итерации решения этой системы уравнений сходится из любого начального приближения к единственной неподвижной точке.
 \begin{proof}
 Пусть даны две Q-функции, $Q_1, Q_2$, и пусть 
-$$\rho(Q_1, Q_2) \coloneqq \max\limits_{s, a} | Q_1(s, a) \HM- Q_2(s, a) | \HM< \eps.$$
+$$\rho(Q_1, Q_2) \coloneqq \max\limits_{s, a} | Q_1(s, a) \HM- Q_2(s, a) | \HM< \eps$$
 Тогда:
 $$
 \log \int\limits_{\A} \exp Q_1(s, a) \diff a \le \log \int\limits_{\A} \exp (Q_2(s, a) + \eps) \diff a = \eps + \log \int\limits_{\A} \exp Q_2(s, a) \diff a
@@ -174,7 +174,7 @@ $$y(\T) \coloneqq r + \gamma \log \int\limits_{\A} \exp Q^*_{\soft}(s', a', \the
 
 \subsection{Soft Policy Improvement}
 
-\begin{theoremBox}[label=th:softpi]{}
+\begin{theoremBox}[label=th:softpi]{Soft Policy Improvement}
 Пусть стратегии $\textcolor{ChadBlue}{\pi_1}$ и $\textcolor{ChadPurple}{\pi_2}$ таковы, что для всех состояний $s$ выполняется:
 $$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a) + \entropy(\textcolor{ChadPurple}{\pi_2}(\cdot \mid s)) \ge \textcolor{ChadBlue}{V^{\pi_1}_{\soft}}(s),$$
 тогда $\textcolor{ChadPurple}{\pi_2} \succeq \textcolor{ChadBlue}{\pi_1}$ с учётом энтропийного бонуса; если хотя бы для одного $s$ неравенство выполнено строго, то $\textcolor{ChadPurple}{\pi_2} \succ \textcolor{ChadBlue}{\pi_1}$.
@@ -183,9 +183,9 @@ $$\E_{\textcolor{ChadPurple}{\pi_2}(a \mid s)} \textcolor{ChadBlue}{Q^{\pi_1}_{\
 \end{proof}
 \end{theoremBox}
 
-Если раньше для того, чтобы попасть под эту теорему, можно было взять $\textcolor{ChadBlue}{Q^{\pi_1}}(s, a)$ и взять от неё аргмакс по действиям, то теперь нужно промаксимизировать её по действиям с учётом добавки энтропийного бонуса. Мы уже поняли, что решением такой задачи будет больцмановская стратегия:
+Если раньше для того, чтобы попасть под эту теорему, можно было взять $\textcolor{ChadBlue}{Q^{\pi_1}}(s, a)$ и взять от неё аргмакс по действиям (<<жадную стратегию>>), то теперь нужно промаксимизировать её по действиям с учётом добавки энтропийного бонуса. Мы уже поняли, что решением такой задачи будет больцмановская стратегия, поэтому жадная стратегия в рамках постановки задачи Maximum Entropy RL имеет такой вид:
 
-\begin{theorem}[Soft Policy Improvement]
+\begin{theorem}[Вид жадной стратегии]
 Пусть $\textcolor{ChadBlue}{\pi_1}$ --- стратегия с мягкой оценочной функцией $\textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a)$. Тогда стратегия $\textcolor{ChadPurple}{\pi_2}(a \mid s) \propto \exp \textcolor{ChadBlue}{Q^{\pi_1}_{\soft}}(s, a)$ не хуже $\textcolor{ChadBlue}{\pi_1}$.
 \begin{proof}
 Мы знаем, что такая $\textcolor{ChadPurple}{\pi_2}$ является решением задачи
@@ -290,7 +290,7 @@ $$\pi_\theta(a \mid s) \coloneqq \sum_{i = 1}^K w_i(s, \theta) \N(\mu_i(s, \thet
     \item засэмплировать мини-батч размера $B$ из буфера
     \item для каждого $s$ из батча засэмплировать шума $\eps(s) \sim \N(0, I)$ и посчитать $\mu(s, \theta)$, $\sigma(s, \theta)$ стратегии $\pi_\theta$
     \item посчитать оценку градиента по параметрам стратегии:
-    $$\nabla_\theta \coloneqq \frac{1}{B}\sum_{s \in B} \nabla_\theta \left[ \sum_{i=0}^A \log \sigma_i(s, \theta) + Q^\pi_{\soft}(s, \mu(s, \theta) + \sigma(s, \theta) \eps(s), \omega_1) \right]$$
+    $$\nabla_\theta \coloneqq \frac{1}{B}\sum_{s \in B} \nabla_\theta \left[ \sum_{i=1}^A \log \sigma_i(s, \theta) + Q^\pi_{\soft}(s, \mu(s, \theta) + \sigma(s, \theta) \eps(s), \omega_1) \right]$$
     \item делаем шаг градиентного подъёма по $\theta$, используя $\nabla_\theta$
     \item для каждого перехода $\T \coloneqq (s, a, r, s', \done)$ засэмплировать $a' \sim \pi_\theta(a' \mid s')$ и сохранить вероятности $\pi_\theta(a' \mid s')$
     \item посчитать таргеты:

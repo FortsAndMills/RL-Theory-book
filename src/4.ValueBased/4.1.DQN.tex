@@ -150,7 +150,7 @@ $$\theta^{-} \leftarrow (1 - \alpha) \theta^{-} + \alpha \theta,$$
     $$y(\T ) \coloneqq r + \gamma (1 - \done) \max\limits_{a'} Q^*(s', a', \theta^-)$$
     \item посчитать лосс:
     $$\Loss(\theta) \coloneqq \frac{1}{B}\sum_{\T} \left( Q^*(s, a, \theta) - y(\T ) \right) ^2$$
-    \item делаем шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
+    \item сделать шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
     \item если $t \operatorname{mod} K = 0$: $\theta^- \gets \theta$
 \end{enumerate}
 \end{algorithm}

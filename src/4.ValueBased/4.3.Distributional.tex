@@ -61,6 +61,34 @@ Q^\pi(s, a) = \E \Z^\pi(s, a)
 В терминальных состояниях для всех действий $\Z^{\pi}(s, a)$ есть вырожденная случайная величина, с вероятностью 1 принимающая значение ноль.
 \end{proposition}
 
+\begin{example}
+Допустим, мы сидим в состоянии и выполнили действие \colorsquare{ChadBlue}. Как будет выглядеть $\Z^{\pi}(s, \colorsquare{ChadBlue})$ для MDP и стратегии $\pi$ с рисунка, $\gamma \HM= 0.5$?
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+%\vspace{-0.4cm}
+\centering
+\includegraphics[width=0.4\textwidth]{Images/Zfunction.png}
+%\vspace{-0.4cm}
+\end{wrapfigure}
+
+Нас ждёт два источника случайности: сначала среда кинет нас или в состояние B, или в состояние C, затем мы случайно будем определять своё следующее действие. Всего нас ждёт 4 возможных исхода. Для каждого мы можем посчитать его вероятность и получаемый reward-to-go. Итого $\Z^{\pi}(s, \colorsquare{ChadBlue})$ --- дискретное распределение с 4 исходами:
+
+\vspace{0.2cm}
+\begin{adjustwidth}{0.7cm}{0cm}
+\begin{tabular}{cccc}
+\toprule
+    Исход $s'$ & Исход $a'$ & Вероятность & reward-to-go \\
+\midrule
+    B & \colorsquare{ChadBlue} & 0.3 & $1 + 2\gamma$ \\
+    B & \colorsquare{ChadRed} & 0.3 & $1$ \\
+    C & \colorsquare{ChadBlue} & 0.1 & $\gamma$ \\
+    C & \colorsquare{ChadRed} & 0.3 & $0$ \\
+\bottomrule
+\end{tabular}
+\end{adjustwidth}
+\vspace{0.2cm}
+\end{example}
+
 \needspace{16\baselineskip}
 \begin{exampleBox}[label=ex:zfunction]{}
 Посчитаем Z-функцию для MDP и стратегии $\pi$ с рисунка, $\gamma \HM= 0.8$.
@@ -576,7 +604,7 @@ $$\sum_{i=0}^{A} \Prob \left( \Pi y(\T) = z_i \right) \log p_i(s_t, a_t, \theta)
     \item спроецировать таргет на сетку $\{ z_0, z_1 \dots z_{A} \}$: $y(\T) \leftarrow \Pi y(\T)$ 
     \item посчитать лосс:
     $$\Loss(\theta) \coloneqq -\frac{1}{B}\sum_{\T} \sum_{i=0}^{A} \Prob \left( y(\T) = z_i \right) \log p_i(s_t, a_t, \theta) $$
-    \item делаем шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
+    \item сделать шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
     \item если $t \operatorname{mod} K = 0$: $\theta^- \gets \theta$
 \end{enumerate}
 \end{algorithm}
@@ -762,7 +790,7 @@ $$\underbrace{\sum_{i=0}^{A-1}}_{\mathclap{\text{\shortstack{учим $A$ \\ к�
     $$y(\T)_j \coloneqq r + (1 - \done)\gamma z_j\left( s', \argmax\limits_{a'} \sum_{i} z_i(s', a', \theta^-), \theta^- \right) $$
     \item посчитать лосс:
     $$\Loss(\theta) \coloneqq \frac{1}{BA}\sum_{\T} \sum_{i=0}^{A-1} \sum_{j=0}^{A-1} \left( \tau_i - \mathbb{I}[z_i(s, a, \theta) < y(\T)_j] \right) \left( z_i(s, a, \theta) - y(\T)_j \right)$$
-    \item делаем шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
+    \item сделать шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
     \item если $t \operatorname{mod} K = 0$: $\theta^- \gets \theta$
 \end{enumerate}
 \end{algorithm}
@@ -859,7 +887,7 @@ Ablation study там показывал, что убирание Dueling DQN, �
     \item обновить приоритеты всех переходов из буфера: $\rho(\T) \gets L(\T, \theta)$
     \item посчитать суммарный лосс:
     $$\Loss(\theta) \coloneqq \frac{1}{B}\sum_{\T} w(\T)L(\T, \theta)$$
-    \item делаем шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
+    \item сделать шаг градиентного спуска по $\theta$, используя $\nabla_\theta \Loss(\theta)$
     \item если $t \operatorname{mod} K = 0$: $\theta^- \gets \theta$
 \end{enumerate}
 \end{algorithm}

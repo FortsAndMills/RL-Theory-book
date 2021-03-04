@@ -392,6 +392,7 @@ $$\Loss(\phi) \coloneqq \max(\Loss_1(\phi), \Loss_2(\phi))$$
     $$\Loss_1(\T, \phi) \coloneqq \left( y(s) - V^\pi_\phi(s) \right) ^2$$
     $$\Loss_2(\T, \phi) \coloneqq \left( y(s) - V^{\old}(s) - \clip(V^\pi_\phi(s) - V^{\old}(s), -\hat{\epsilon}, \hat{\epsilon}) \right) ^2$$
     $$\Loss^{\critic}(\phi) \coloneqq \frac{1}{B}\sum_{\T} \max(\Loss_1(\T, \phi), \Loss_2(\T, \phi))$$
+    \item сделать шаг градиентного спуска по $\phi$, используя $\nabla_\phi \Loss^{\critic}(\phi)$
     \item нормализовать $\Psi_{\mathrm{GAE}}(s, a)$ по батчу, чтобы в среднем значения равнялись 0, а дисперсия --- 1.
     \item посчитать коэффициенты в importance sampling:
     $$r_\theta(\T) \coloneqq \frac{\pi_\theta(a \mid s)}{\pi^{\old}(a \mid s)}$$
@@ -399,7 +400,7 @@ $$\Loss(\phi) \coloneqq \max(\Loss_1(\phi), \Loss_2(\phi))$$
     $$r_\theta^{\clip}(\T) \coloneqq \clip(r_\theta(\T), 1 - \epsilon, 1 + \epsilon)$$
     \item вычислить градиент для актёра:
     $$\nabla^{\actor}_\theta \coloneqq \frac{1}{B}\sum_{\T} \nabla_\theta \min \left( r_\theta(\T)\Psi_{\mathrm{GAE}}(s, a), r_\theta^{\clip}(\T)\Psi_{\mathrm{GAE}}(s, a) \right) $$
-    \item сделать шаг градиентного спуска по градиенту $-\nabla^{\actor}_\theta + \alpha \nabla_\phi \Loss^{\critic}(\phi)$
+    \item сделать шаг градиентного подъёма по $\theta$, используя $\nabla^{\actor}_\theta$
     \end{itemize}
 \end{enumerate}
 \end{algorithm}
