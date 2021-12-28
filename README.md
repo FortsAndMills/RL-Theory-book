@@ -1,6 +1,6 @@
-# RL-Theory-book (rus)
+# Reinforcement Learning Theory Book (rus)
 
-**Status**: main topics covered, requires revision / editing
+**Global update 28/12/21**: text revision, error fixes. Added Retrace.
 
 - [x] Ch. 1: Introduction
 - [x] Ch. 2: Meta-heuristics
@@ -9,9 +9,9 @@
 - [x] Ch. 3: Classic theory
     - [x] Bellman equations
     - [x] RPI, policy improv. theorem
-    - [x] Value Iteration, Policy Iteration
+    - [x] Value Iteration, Generalized Policy Iteration
     - [x] Temporal Difference, Q-learning, SARSA
-    - [x] Eligibility Traces, TD-lambda
+    - [x] Eligibility Traces, TD-lambda, Retrace
 - [x] Ch. 4: Value-based
     - [x] DQN
     - [x] Double DQN, Dueling DQN, PER, Noisy DQN, Multi-step DQN
