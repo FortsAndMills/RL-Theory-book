@@ -54,7 +54,11 @@
 \usepackage{afterpage}  % для перекраски последней страницы в чёрный
 
 % футноты в minipages по дефолту латинские и с ними возникают беды
-\let\thempfootnote\thefootnote
+%\let\thempfootnote\thefootnote  % заменяет символы сносок на цифры, но это иногда сбивает с толку
+\def\@xfootnote[#1]{%              позволяет использовать \footnote[символ]{текст}
+  \protected@xdef\@thefnmark{#1}%
+  \@footnotemark\@footnotetext}
+
 
 % Якобы помогает корректно переносить английские куски текста
 \newcommand{\ENGLISH}[1]{\selectlanguage{english}{#1}\selectlanguage{russian}}
@@ -128,8 +132,7 @@
      linkcolor=ChadPurple,
      urlcolor=ChadRed,
      citecolor=ChadBlue,
-     hyperfootnotes=false
-         ]{hyperref}
+     hyperfootnotes=false]{hyperref}
 \usepackage[figure,table]{hypcap} % Correct a problem with hyperref
 \urlstyle{rm}                     % so it doesn't use a typewriter font for url's.
 
