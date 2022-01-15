@@ -397,7 +397,7 @@ $$V(s) \leftarrow \max\limits_{a} \left[ r(s, a) + \gamma \E_{s'} V(s') \right]$
 
 В уравнениях Беллмана мы <<раскручивали>> наше будущее на один шаг вперёд и дальше заменяли оставшийся <<хвост>> на определение V-функции. Понятно, что мы могли бы раскрутить не на один шаг, а на $N$ шагов вперёд.
 
-\begin{theorem}[$N$-шаговое уравнение Беллмана]\,
+\begin{theorem}[$N$-шаговое уравнение Беллмана]Для любого состояния $s_0$:
 \begin{equation}\label{NstepBellman}
  V^{\pi}(s_0) = \E_{\Traj_{:N} \sim \pi \mid s_0} \left[ \sum_{t=0}^{N-1} \gamma^{t}r_t +  \gamma^N \E_{s_N} V^{\pi}(s_N) \right]   
 \end{equation}
