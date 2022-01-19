@@ -83,7 +83,7 @@ p(\Traj \mid \pi^*) \propto e^{R(\Traj)} \prod_{t \ge 0}p(s_{t+1} \mid s_t, a_t)
     \KL(p(\Traj \mid \pi) \parallel p(\Traj \mid \pi^*)) \to \min_{\pi}
 \end{equation}
 
-\begin{theorem}
+\begin{theoremBox}[label=th:inverserlassumptionexplanation]{}
 Задача \eqref{meirl_kl} эквивалентна задаче Maximum Entropy RL \eqref{merl}.
 \begin{proof}
 Распишем \eqref{meirl_kl}:
@@ -94,7 +94,18 @@ p(\Traj \mid \pi^*) \propto e^{R(\Traj)} \prod_{t \ge 0}p(s_{t+1} \mid s_t, a_t)
 $$\E_{\Traj \sim \pi} \sum_{t \ge 0} \left[ r_t - \log \pi(a_t \mid s_t) \right] \to \max_{\pi},$$
 что есть в точности Maximum Entropy RL.
 \end{proof}
-\end{theorem}
+\end{theoremBox}
+
+Оговоримся, что на самом деле у нас нет гарантий, что мы сможем проминимизировать KL-дивергенцию до точного нуля. Другими словами, нельзя сказать, что оптимальная стратегия в Max. Entropy RL обязательно удовлетворяет свойству \eqref{meirl}.
+
+\begin{proposition}
+Ноль в задаче \eqref{meirl_kl} не обязательно достижим.
+\begin{proof}[Контрпример]
+Рассмотрим MDP с единственным состоянием, в котором от действий ничего не зависит, но с вероятностью 0.5 агент получает $+\log 2$, а с вероятностью 0.5 агент получает $+0$, после чего игра заканчивается. Распределение \eqref{meirl} говорит, что оптимальная стратегия так выбирает действия, что траектория с наградой $+\log 2$ встречает с вероятностью $\frac{2}{3}$, а с наградой $+0$ --- с вероятностью $\frac{1}{3}$, однако это невозможно: любая стратегия будет получать их с вероятностями 0.5.
+\end{proof}
+\end{proposition}
+
+Таким образом, теорема \ref{th:inverserlassumptionexplanation} говорит, что в Maximum Entropy RL можно считать, что оптимизация движет нашу стратегию в сторону \eqref{meirl_kl}, и поэтому это предположение для моделирования экспертного поведения можно считать разумным, но в строгом смысле оно для оптимальных стратегий не выполняется.
 
 \subsection{Guided Cost Learning}
 
