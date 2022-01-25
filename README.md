@@ -1,6 +1,6 @@
 # Reinforcement Learning Theory Book (rus)
 
-**Global update 28/12/21**: text revision, error fixes. Added Retrace.
+**Full book on Arxiv:** https://arxiv.org/abs/2201.09746
 
 - [x] Ch. 1: Introduction
 - [x] Ch. 2: Meta-heuristics
