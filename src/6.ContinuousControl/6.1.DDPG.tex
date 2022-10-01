@@ -153,7 +153,7 @@ $$\eps_{t + 1} \coloneqq \alpha \eps_t + \N(0, \sigma^2I),$$
     $$y(\T ) \coloneqq r + \gamma (1 - \done) Q_{\theta^{-}} \left( s', \pi_{\omega^{-}} \left( s' \right) \right)$$
     \item сделать один шаг градиентного спуска по $\theta$:
     $$\frac{1}{B}\sum_{\T} \left( Q_{\theta}(s, a) - y(\T ) \right) ^2 \to \min_\theta$$
-    \item если $t \operatorname{mod} K = 0$: 
+    \item обновить таргет-сети: 
         $$\theta^{-} \gets (1 - \beta) \theta^{-} + \beta \theta$$
         $$\omega^{-} \gets (1 - \beta) \omega^{-} + \beta \omega$$
 \end{enumerate}
